@@ -1,5 +1,6 @@
+using Application.Tyres;
 using Domain;
-//using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -8,17 +9,17 @@ namespace API.Controllers
 {
     public class TyreController : BaseApiController
     {
-        // [HttpGet] // api/activities
-        // public async Task<ActionResult<List<Activity>>> GetActivities()
-        // {
-        //     return await Mediator.Send(new List.Query());
-        // }
+        [HttpGet("GetTyres")]
+        public async Task<IActionResult> GetTyres()
+        {
+            return HandleResult(await Mediator.Send(new List.Query()));
+        }
 
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<Activity>> GetActivity(Guid id)
-        // {
-        //     return await Mediator.Send(new Details.Query{Id = id});
-        // }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTyre(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Details.Query{Id = id}));
+        }
 
         // [HttpPost]
         // public async Task<IActionResult> CreateActivity(Activity activity)
