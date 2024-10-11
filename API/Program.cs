@@ -1,4 +1,6 @@
 using API.Extensions;
+using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -35,7 +37,7 @@ try
     //var userManager = services.GetRequiredService<UserManager<User>>();
     //var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
-    //await Seed.SeedData(context);
+    await Seed.SeedData(context);
     //await Seed.SeedUsers(userManager, roleManager);//za sad je jos ne pozivam zbog sukija
 }
 catch (Exception ex)
