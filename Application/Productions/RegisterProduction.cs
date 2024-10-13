@@ -3,7 +3,7 @@
     using MediatR;
     using Persistence;
 
-    namespace Application.Production
+    namespace Application.Productions
     {
         public class RegisterProduction
         {

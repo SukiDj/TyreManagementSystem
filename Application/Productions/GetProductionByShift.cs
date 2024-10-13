@@ -3,13 +3,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Production
+namespace Application.Productions
 {
-    public class GetProductionByDay
+    public class GetProductionByShift
     {
         public class Query : IRequest<Result<List<ProductionDto>>>
         {
-            public DateTime Date { get; set; }
+            public int Shift { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<List<ProductionDto>>>
@@ -24,7 +24,7 @@ namespace Application.Production
             public async Task<Result<List<ProductionDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var productions = await _context.Productions
-                    .Where(p => p.Tyre.ProductionDate == request.Date)
+                    .Where(p => p.Shift == request.Shift)
                     .Select(p => new ProductionDto
                     {
                         TyreCode = p.Tyre.Code.ToString(),
@@ -38,5 +38,6 @@ namespace Application.Production
                 return Result<List<ProductionDto>>.Success(productions);
             }
         }
+
     }
 }

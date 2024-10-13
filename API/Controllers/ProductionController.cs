@@ -1,4 +1,4 @@
-using Application.Production;
+using Application.Productions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Persistence;

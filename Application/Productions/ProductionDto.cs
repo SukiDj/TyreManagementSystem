@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Production
+namespace Application.Productions
 {
     public class ProductionDto
     {

@@ -3,19 +3,18 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Production
+namespace Application.Productions
 {
-    public class GetProductionByShift
+    public class ListProductionHistory
     {
         public class Query : IRequest<Result<List<ProductionDto>>>
         {
-            public int Shift { get; set; }
+            public Guid OperatorId { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<List<ProductionDto>>>
         {
             private readonly DataContext _context;
-
             public Handler(DataContext context)
             {
                 _context = context;
@@ -23,21 +22,20 @@ namespace Application.Production
 
             public async Task<Result<List<ProductionDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var productions = await _context.Productions
-                    .Where(p => p.Shift == request.Shift)
+                var history = await _context.Productions
+                    .Where(p => p.Operator.Id == request.OperatorId)
                     .Select(p => new ProductionDto
                     {
                         TyreCode = p.Tyre.Code.ToString(),
-                        Shift = p.Shift,
                         QuantityProduced = p.QuantityProduced,
-                        MachineNumber = p.Machine.Id.ToString(),
-                        ProductionDate = p.Tyre.ProductionDate
+                        ProductionDate = p.Tyre.ProductionDate,
+                        Shift = p.Shift,
+                        MachineNumber = p.Machine.Id.ToString()
                     })
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync();
 
-                return Result<List<ProductionDto>>.Success(productions);
+                return Result<List<ProductionDto>>.Success(history);
             }
         }
-
     }
 }

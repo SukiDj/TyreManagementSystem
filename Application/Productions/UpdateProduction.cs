@@ -2,7 +2,7 @@ using Application.Core;
 using MediatR;
 using Persistence;
 
-namespace Application.Production
+namespace Application.Productions
 {
     public class UpdateProduction
     {
