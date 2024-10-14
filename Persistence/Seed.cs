@@ -1,4 +1,5 @@
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence
 {
@@ -66,5 +67,38 @@ namespace Persistence
                 await context.SaveChangesAsync();
             }
         }
+
+        public static async Task SeedUsers(UserManager<User> userManager, RoleManager<AppRole> roleManager)
+    {
+        if(!userManager.Users.Any())
+        {
+            var korisnici = new List<User> {
+                //new ProductionOperator{Ime = "Vukan", Prezime = "Taskov", UserName = "tasko_", Email = "taskov.vukan@elfak.rs", LockoutEnabled = false, Telefon = "063492989", DatumRodjenja = new DateTime(2002, 7, 11)},za sad ne radi dok ne promenimo migraciju
+                new BusinessUnitLeader{Ime = "Dimitrije", Prezime = "Najdanovic", UserName = "dika", Email = "dikadika@elfak.rs", LockoutEnabled = false, Telefon = "064492989", DatumRodjenja = new DateTime(2002, 11, 7)},
+                new QualitySupervisor{Ime = "Aleksandar", Prezime = "Djordjevic", UserName = "suki", Email = "sukisuki@elfak.rs", LockoutEnabled = false, Telefon = "065492989", DatumRodjenja = new DateTime(2002, 4, 26)}
+            };
+
+
+            var roles = new List<AppRole> {
+                new AppRole{Name = "ProductionOperator"},
+                new AppRole{Name = "BusinessUnitLeader"},
+                new AppRole{Name = "QualitySupervisor"}
+            };
+
+            foreach (var role in roles){
+                await roleManager.CreateAsync(role);//da kreiramo ulogu u bazi
+            }
+
+            foreach(var korisnik in korisnici){
+                await userManager.CreateAsync(korisnik, "PrejaK@s1fra");//da kreiramo korisnika sa sifrom u bazi
+                    if (korisnik.Ime == "Vukan")
+                        await userManager.AddToRoleAsync(korisnik, "ProductionOperator");
+                    if (korisnik.Ime == "Dimitrije")
+                        await userManager.AddToRoleAsync(korisnik, "BusinessUnitLeader");
+                    if (korisnik.Ime == "Aleksandar")
+                        await userManager.AddToRoleAsync(korisnik, "QualitySupervisor");
+            }
+        }
+    }
     }
 }
