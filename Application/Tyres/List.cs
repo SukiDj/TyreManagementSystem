@@ -1,4 +1,5 @@
 using Application.Core;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,18 +9,24 @@ namespace Application.Tyres
 {
     public class List
     {
-        public class Query : IRequest<Result<List<Tyre>>> {}
+        public class Query : IRequest<Result<List<TyreDto>>> {}
 
-        public class Handler : IRequestHandler<Query, Result<List<Tyre>>>
+        public class Handler : IRequestHandler<Query, Result<List<TyreDto>>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IMapper _mapper;
+
+            public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
-            public async Task<Result<List<Tyre>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<TyreDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<Tyre>>.Success(await _context.Tyres.ToListAsync(cancellationToken));
+                var tyres = await _context.Tyres.ToListAsync(cancellationToken);
+                var tyresToReturn = _mapper.Map<List<TyreDto>>(tyres);
+
+                return Result<List<TyreDto>>.Success(tyresToReturn);
             }
         }
     }

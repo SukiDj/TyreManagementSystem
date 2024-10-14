@@ -1,3 +1,4 @@
+using Application.Tyres;
 using AutoMapper;
 using Domain;
 //using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ public class MappingProfiles : Profile
     public MappingProfiles()
     {
         CreateMap<Tyre, Tyre>();
+        CreateMap<Tyre, TyreDto>();
         CreateMap<User, User>();
         CreateMap<BusinessUnitLeader, BusinessUnitLeader>();
         CreateMap<ProductionOperator, ProductionOperator>();

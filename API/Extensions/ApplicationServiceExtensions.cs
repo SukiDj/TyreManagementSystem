@@ -1,9 +1,11 @@
 using Application.Core;
+using Application.Interfaces;
 using Application.Productions;
 using Application.Sales;
 using Application.Tyres;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -33,6 +35,8 @@ namespace API.Extensions
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<RegisterProduction>();
             services.AddValidatorsFromAssemblyContaining<RegisterTyreSale>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }
