@@ -1,5 +1,9 @@
 using Application.Core;
+using Application.Productions;
+using Application.Sales;
 using Application.Tyres;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -26,6 +30,9 @@ namespace API.Extensions
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<RegisterProduction>();
+            services.AddValidatorsFromAssemblyContaining<RegisterTyreSale>();
 
             return services;
         }

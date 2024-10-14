@@ -11,7 +11,7 @@ namespace Application.Productions
             public Guid Id { get; set; }
             public int Shift { get; set; }
             public int QuantityProduced { get; set; }
-            public int ProdOrderID { get; set; }
+            //public int ProdOrderID { get; set; }
             public Guid TyreId { get; set; }
         }
 
@@ -32,7 +32,7 @@ namespace Application.Productions
 
                 production.Shift = request.Shift;
                 production.QuantityProduced = request.QuantityProduced;
-                production.ProdOrderID = request.ProdOrderID;
+                //production.ProdOrderID = request.ProdOrderID;
                 production.Tyre = await _context.Tyres.FindAsync(request.TyreId);
 
                 var result = await _context.SaveChangesAsync() > 0;

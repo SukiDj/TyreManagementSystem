@@ -10,6 +10,6 @@ namespace Domain
         public string TargetMarket { get; set; }
         public Tyre Tyre { get; set; }
         public Client Client { get; set; }
-        public string ProductionOrderId { get; set; } // treba veza sa Production
+        public Production Production { get; set; } // veza sa Production
     }
 }

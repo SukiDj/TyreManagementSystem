@@ -61,6 +61,10 @@ namespace Persistence
             builder.Entity<Sale>()
                 .HasOne(s => s.Client)
                 .WithMany(c => c.Sales);
+
+            builder.Entity<Sale>()
+                .HasOne(s => s.Production)
+                .WithMany(c => c.Sales);
             
             builder.Entity<Report>()
                 .HasOne(r => r.BusinessUnitLeader)

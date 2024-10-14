@@ -15,7 +15,7 @@ namespace Application.Sales
             public double PricePerUnit { get; set; }
             public string UnitOfMeasure { get; set; }
             public DateTime SaleDate { get; set; }
-            public string ProductionOrderId { get; set; }
+            public Guid ProductionOrderId { get; set; }
             public string TargetMarket { get; set; }
         }
 
@@ -39,7 +39,7 @@ namespace Application.Sales
                     PricePerUnit = request.PricePerUnit,
                     UnitOfMeasure = request.UnitOfMeasure,
                     TargetMarket = request.TargetMarket,
-                    ProductionOrderId = request.ProductionOrderId
+                    Production = await _context.Productions.FindAsync(request.ProductionOrderId)
                 };
 
                 if (sale.Tyre == null || sale.Client == null)
