@@ -23,6 +23,7 @@ namespace Persistence
         public DbSet<QualitySupervisor> QualitySupervisors { get; set; }
         public DbSet<ProductionOperator> ProductionOperators { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<ActionLog> ActionLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

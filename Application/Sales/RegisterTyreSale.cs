@@ -1,3 +1,4 @@
+using Application.Actions;
 using Application.Core;
 using Domain;
 using MediatR;
@@ -22,10 +23,12 @@ namespace Application.Sales
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
+            private readonly ActionLogger _actionLogger;
 
-            public Handler(DataContext context)
+            public Handler(DataContext context, ActionLogger actionLogger)
             {
                 _context = context;
+                _actionLogger = actionLogger;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
@@ -52,6 +55,8 @@ namespace Application.Sales
                 var result = await _context.SaveChangesAsync() > 0;
 
                 if (!result) return Result<Unit>.Failure("Failed to register sale");
+
+                await _actionLogger.LogActionAsync("RegisterSale", $"Sale registered for TyreId: {request.TyreId}, ClientId: {request.ClientId}");
 
                 return Result<Unit>.Success(Unit.Value);
             }
