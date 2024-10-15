@@ -1,3 +1,4 @@
+using Application.Actions;
 using Application.Core;
 using Application.Interfaces;
 using Application.Productions;
@@ -37,6 +38,7 @@ namespace API.Extensions
             services.AddValidatorsFromAssemblyContaining<RegisterTyreSale>();
             services.AddHttpContextAccessor();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<ActionLogger>();
 
             return services;
         }
