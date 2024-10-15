@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { User, UserFormValues } from "../models/User";
 import { store } from "./store";
 import { router } from "../router/Routes";
+import agent from "../../api/agent";
 
 
 export default class userStore{
@@ -17,13 +18,41 @@ export default class userStore{
         return !!this.user;
     }
 
+    getDecodedToken(token : string){
+        return JSON.parse(atob(token.split('.')[1]))// delimo token po . jer je prvi deo algoritam, pa drugi deo iza tacke nama bitne informacije, pa treci deo iza tacke potpis sto nas ne zanima, pa sa [1] uzimamo samo informacije koje nas zanimaju
+    }
+
+    get isProductionOperator() {
+        if (!this.user) return false;
+        const token = this.getDecodedToken(this.user.token);
+        return token["role"] && token["role"].includes("ProductionOperator");
+    }
+
+    get isBusinessUnitLeader() {
+        if (!this.user) return false;
+        const token = this.getDecodedToken(this.user.token);
+        return token["role"] && token["role"].includes("BusinessUnitLeader");
+    }
+
+    get isQualitySupervisor() {
+        if (!this.user) return false;
+        const token = this.getDecodedToken(this.user.token);
+        return token["role"] && token["role"].includes("QualitySupervisor");
+    }
+
     login = async (creds: UserFormValues) => {
         try{
             const user = await agent.Account.login(creds);
             store.commonStore.setToken(user.token);
             this.startRefreshTokenTimer(user);//ovo treba da pozovemo svuda kad dobijemo usera od server
             runInAction(()=> this.user = user);
-            router.navigate('/');
+            if(this.isQualitySupervisor)
+                router.navigate('/QSPage');
+            if(this.isProductionOperator)
+                router.navigate('/ProductionOperatorPage');
+            if(this.isBusinessUnitLeader)
+                router.navigate('/BusinessUnitLeaderPage');
+            
             store.modalStore.closeModal();
         } catch(error){
             throw error;

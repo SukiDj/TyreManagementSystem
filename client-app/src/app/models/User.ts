@@ -1,9 +1,11 @@
 export interface User{
     ime: string;
     prezime:string;
+    telefon:string;
+    datumRodjenja:Date;
     token:string;
-    userName:string;
     roles : Role;
+    userName:string;
 }
 
 export interface Role {

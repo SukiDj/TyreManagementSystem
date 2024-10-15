@@ -3,6 +3,7 @@ import { store } from '../app/stores/store';
 import { PaginatedResult } from "../app/models/Pagination";
 import { router } from '../app/router/Routes';
 import { toast } from 'react-toastify';
+import { User, UserFormValues } from '../app/models/User';
 
 const sleep =(delay: number) =>{
     return new Promise((resolve)=>{
@@ -87,3 +88,14 @@ const requests = {
     put: <T>(url:string,body:{}) => axios.put<T>(url,body).then(responseBody),
     del: <T>(url:string)=> axios.delete<T>(url).then(responseBody)
 }
+
+const Account = {
+    login: (user:UserFormValues) => requests.post<User>('/Account/login', user),
+    refreshToken: () => requests.post<User>('/Account/refreshToken/', {})
+}
+
+const agent = {
+    Account
+}
+
+export default agent;

@@ -1,35 +1,35 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import App from "../layout/App";
 import HomePage from "../features/HomePage/HomePage.tsx"
+import RequireQualitySupervisor from "./RequireQualitySupervisor.tsx";
+import QSPage from "../features/QSPage/QSPage.tsx";
+import RequireProductionOperator from "./RequireProductionOperator.tsx";
+import ProductionOperatorPage from "../features/ProductionOperatorPage/ProductionOperatorPage.tsx";
+import RequireBusinessUnitLeader from "./RequireBusinessUnitLeader.tsx";
+import BusinessUnitLeaderPage from "../features/BusinessUnitLeaderPage/BusinessUnitLeaderPage.tsx";
 
 export const routes: RouteObject[] = [
     {
         path:"/",
         element: <App/>,
         children:[
-            /*{
-                element: <RequireAuth />, children: [
-                    {path: 'profiles/:username', element:<ProfilePage />}
+            
+            {
+                element: <RequireQualitySupervisor />, children: [
+                    {path: 'QSPage', element: <QSPage /> }
                 ]
             },
             {
-                element: <RequireAdmin />, children: [
-                    {path: 'adminDashboard', element: <AdminDashBoard /> },
-                    {path: 'errors', element:<TestErrors/>},
-                    {path: 'guideRequests', element: <GuideDashBoard />}
+                element: <RequireProductionOperator />, children: [//oovo sve moze i admin tako sam namestio u RequireVodic ako ocemo da ga iskljucujemo
+                    {path: 'ProductionOperatorPage', element:<ProductionOperatorPage/>}
                 ]
             },
             {
-                element: <RequireVodic />, children: [//oovo sve moze i admin tako sam namestio u RequireVodic ako ocemo da ga iskljucujemo
-                    {path: 'manage/:id', element:<TourForm key='manage'/>},
-                    {path: 'createTour', element:<TourForm key='create'/>},
-                    {path: 'createPlant', element:<PlantForm key='create' />},
-                    {path: 'managePlant/:id', element:<PlantForm key='manage' />},
-                    {path: 'createArea', element:<AreaForm />},
-                    {path: 'createRout', element:<RoutForm />},
+                element: <RequireBusinessUnitLeader />, children: [//oovo sve moze i admin tako sam namestio u RequireVodic ako ocemo da ga iskljucujemo
+                    {path: 'BusinessUnitLeaderPage', element:<BusinessUnitLeaderPage/>}
                 ]
-            }
-        */
+            },
+
             {path:'', element:<HomePage />}
         ]
     }

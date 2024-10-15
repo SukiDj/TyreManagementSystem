@@ -3,8 +3,11 @@ import { observer } from "mobx-react-lite"
 import userStore from "../../stores/userStore"
 import { Button, Form, Header, Label } from "semantic-ui-react"
 import TextInput from "../../common/Form/TextInput"
+import { useStore } from "../../stores/store"
 
 export default observer( function LoginForm() {
+  const {userStore, modalStore} = useStore();
+
   return (
     <Formik 
         initialValues={{email:'', password:'', error:null}}
