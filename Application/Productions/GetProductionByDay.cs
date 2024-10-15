@@ -24,14 +24,14 @@ namespace Application.Productions
             public async Task<Result<List<ProductionDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var productions = await _context.Productions
-                    .Where(p => p.Tyre.ProductionDate == request.Date)
+                    .Where(p => p.ProductionDate == request.Date)
                     .Select(p => new ProductionDto
                     {
                         TyreCode = p.Tyre.Code.ToString(),
                         Shift = p.Shift,
                         QuantityProduced = p.QuantityProduced,
                         MachineNumber = p.Machine.Id.ToString(),
-                        ProductionDate = p.Tyre.ProductionDate
+                        ProductionDate = p.ProductionDate
                     })
                     .ToListAsync(cancellationToken);
 

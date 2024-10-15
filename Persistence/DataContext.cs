@@ -73,7 +73,7 @@ namespace Persistence
             
             builder.Entity<Production>()
                 .HasOne(p => p.Supervisor)
-                .WithMany(q => q.Production);
+                .WithMany(q => q.Productions);
         }
     }
 }

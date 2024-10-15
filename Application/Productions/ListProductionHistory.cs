@@ -28,7 +28,7 @@ namespace Application.Productions
                     {
                         TyreCode = p.Tyre.Code.ToString(),
                         QuantityProduced = p.QuantityProduced,
-                        ProductionDate = p.Tyre.ProductionDate,
+                        ProductionDate = p.ProductionDate,
                         Shift = p.Shift,
                         MachineNumber = p.Machine.Id.ToString()
                     })

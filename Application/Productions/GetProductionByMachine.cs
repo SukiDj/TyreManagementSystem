@@ -31,7 +31,7 @@ namespace Application.Productions
                         Shift = p.Shift,
                         QuantityProduced = p.QuantityProduced,
                         MachineNumber = p.Machine.Id.ToString(),
-                        ProductionDate = p.Tyre.ProductionDate
+                        ProductionDate = p.ProductionDate
                     })
                     .ToListAsync(cancellationToken);
 
