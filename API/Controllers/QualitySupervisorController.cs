@@ -1,24 +1,39 @@
 using Application.Productions;
 using Application.Sales;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Persistence;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class QualitySupervisorController : BaseApiController
     {
-        private readonly DataContext _context;
-
-        public QualitySupervisorController(DataContext context)
+        [HttpPost("registerTyreSale")]
+        public async Task<IActionResult> RegisterTyreSale(
+            Guid tyreId, 
+            Guid clientId, 
+            int quantitySold, 
+            double pricePerUnit, 
+            string unitOfMeasure, 
+            DateTime saleDate, 
+            Guid productionOrderId, 
+            string targetMarket)
         {
-            _context = context;
-        }
+            var command = new RegisterTyreSale.Command
+            {
+                TyreId = tyreId,
+                ClientId = clientId,
+                QuantitySold = quantitySold,
+                PricePerUnit = pricePerUnit,
+                UnitOfMeasure = unitOfMeasure,
+                SaleDate = saleDate,
+                ProductionOrderId = productionOrderId,
+                TargetMarket = targetMarket
+            };
 
-        [HttpPost("registerSale")]
-        public async Task<IActionResult> RegisterSale(RegisterTyreSale.Command command)
-        {
             return HandleResult(await Mediator.Send(command));
         }
+
 
         [HttpGet("submissionHistory")]
         public async Task<IActionResult> GetSubmissionHistory()
@@ -34,16 +49,30 @@ namespace API.Controllers
         }
 
         [HttpPut("updateProduction/{id}")]
-        public async Task<IActionResult> UpdateProduction(Guid id, UpdateProduction.Command command)
+        public async Task<IActionResult> UpdateProduction(Guid id, int shift, int quantityProduced, Guid tyreId)
         {
-            command.Id = id;
+            var command = new UpdateProduction.Command
+            {
+                Id = id,
+                Shift = shift,
+                QuantityProduced = quantityProduced,
+                TyreId = tyreId
+            };
             return HandleResult(await Mediator.Send(command));
         }
 
         [HttpPut("updateSale/{id}")]
-        public async Task<IActionResult> UpdateSale(Guid id, UpdateSale.Command command)
+        public async Task<IActionResult> UpdateSale(Guid id, Guid tyreId, Guid clientId, int quantitySold, double pricePerUnit, DateTime saleDate)
         {
-            command.Id = id;
+            var command = new UpdateSale.Command
+            {
+                Id = id,
+                TyreId = tyreId,
+                ClientId = clientId,
+                QuantitySold = quantitySold,
+                PricePerUnit = pricePerUnit,
+                SaleDate = saleDate
+            };
             return HandleResult(await Mediator.Send(command));
         }
 

@@ -11,7 +11,6 @@ namespace Application.Productions
             public Guid Id { get; set; }
             public int Shift { get; set; }
             public int QuantityProduced { get; set; }
-            //public int ProdOrderID { get; set; }
             public Guid TyreId { get; set; }
         }
 

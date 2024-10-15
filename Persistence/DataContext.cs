@@ -72,8 +72,7 @@ namespace Persistence
             
             builder.Entity<Production>()
                 .HasOne(p => p.Supervisor)
-                .WithOne(q => q.Production)
-                .HasForeignKey<QualitySupervisor>(q => q.ProductionId);
+                .WithMany(q => q.Production);
         }
     }
 }
