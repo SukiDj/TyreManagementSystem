@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,35 +11,14 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241015082645_SupervisorChanged")]
+    partial class SupervisorChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
-
-            modelBuilder.Entity("Domain.ActionLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ActionName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Details")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ActionLogs");
-                });
 
             modelBuilder.Entity("Domain.AppRole", b =>
                 {

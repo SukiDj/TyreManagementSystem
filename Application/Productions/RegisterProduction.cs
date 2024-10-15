@@ -1,3 +1,4 @@
+using Application.Actions;
 using Application.Core;
 using Application.Interfaces;
 using Domain;
@@ -32,10 +33,12 @@ namespace Application.Productions
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            private readonly ActionLogger _actionLogger;
+            public Handler(DataContext context, IUserAccessor userAccessor, ActionLogger actionLogger)
             {
                 _context = context;
                 _userAccessor = userAccessor;
+                _actionLogger = actionLogger;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
@@ -66,6 +69,8 @@ namespace Application.Productions
                 var result = await _context.SaveChangesAsync() > 0;
 
                 if (!result) return Result<Unit>.Failure("Failed to register production");
+
+                await _actionLogger.LogActionAsync("RegisterProduction", $"Production registered for TyreId: {request.TyreId}, OperatorId: {productionOperator}");
 
                 return Result<Unit>.Success(Unit.Value);
             }

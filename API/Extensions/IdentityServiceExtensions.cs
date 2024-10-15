@@ -65,16 +65,17 @@ public static class IdentityServiceExtensions
 
         //pravim polise za autorizaciju koje ce da se koriste iznad funkcija da se odredi ko sme da pozove fju
         services.AddAuthorization(options => {
-            options.AddPolicy("RequireAdministratorRole", policy => 
-                policy.RequireRole("Administrator"));
-            options.AddPolicy("RequireTuristickiVodicRole", policy => 
-                policy.RequireRole("TuristickiVodic"));
-            options.AddPolicy("RequireObicanKorisnikRole", policy => 
-                policy.RequireRole("ObicanKorisnik"));
-            options.AddPolicy("RequireObicanKorisnikRoleOrTuristickiVodicRole", policy => 
-                policy.RequireRole("ObicanKorisnik", "TuristickiVodic"));
-            options.AddPolicy("RequireAdministratorRoleOrTuristickiVodicRole", policy => 
-                policy.RequireRole("Administrator", "TuristickiVodic"));
+            options.AddPolicy("RequireQualitySupervisorRole", policy => 
+                policy.RequireRole("QualitySupervisor"));
+            options.AddPolicy("RequireBusinessUnitLeaderRole", policy => 
+                policy.RequireRole("BusinessUnitLeader"));
+            options.AddPolicy("RequireProductionOperatorRole", policy => 
+                policy.RequireRole("ProductionOperator"));
+
+            options.AddPolicy("RequireProductionOperatorRoleOrQualitySupervisorRole", policy => 
+                policy.RequireRole("ProductionOperator", "QualitySupervisor"));
+            options.AddPolicy("RequireBusinessUnitLeaderRoleOrQualitySupervisorRole", policy => 
+                policy.RequireRole("BusinessUnitLeader", "QualitySupervisor"));
         });
 
         services.AddScoped<TokenService>();

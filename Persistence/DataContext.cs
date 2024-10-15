@@ -23,6 +23,7 @@ namespace Persistence
         public DbSet<QualitySupervisor> QualitySupervisors { get; set; }
         public DbSet<ProductionOperator> ProductionOperators { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<ActionLog> ActionLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -72,8 +73,7 @@ namespace Persistence
             
             builder.Entity<Production>()
                 .HasOne(p => p.Supervisor)
-                .WithOne(q => q.Production)
-                .HasForeignKey<QualitySupervisor>(q => q.ProductionId);
+                .WithMany(q => q.Production);
         }
     }
 }

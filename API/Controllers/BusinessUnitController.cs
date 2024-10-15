@@ -1,19 +1,14 @@
 using Application.Productions;
 using Application.Sales;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class BusinessUnitController : BaseApiController
     {
-        private readonly DataContext _context;
-
-        public BusinessUnitController(DataContext context)
-        {
-            _context = context;
-        }
-
         [HttpGet("productionByDay")]
         public async Task<IActionResult> GetProductionByDay(DateTime date)
         {

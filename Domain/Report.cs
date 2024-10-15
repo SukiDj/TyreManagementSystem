@@ -1,6 +1,6 @@
 namespace Domain
 {
-    public class Report
+    public class Report// Ova klasa mi ne treba?!
     {
         public Guid Id { get; set; }
         public string Type { get; set; }
