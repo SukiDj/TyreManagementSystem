@@ -24,6 +24,7 @@ namespace Application.Productions
                 var history = await _context.Productions
                     .Select(p => new ProductionDto
                     {
+                        Id = p.Id,
                         TyreCode = p.Tyre.Code.ToString(),
                         QuantityProduced = p.QuantityProduced,
                         ProductionDate = p.ProductionDate,

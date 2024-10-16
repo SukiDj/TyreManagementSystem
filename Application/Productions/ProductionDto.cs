@@ -7,6 +7,7 @@ namespace Application.Productions
 {
     public class ProductionDto
     {
+        public Guid Id { get; set; }
         public string TyreCode { get; set; }
         public int QuantityProduced { get; set; }
         public DateTime ProductionDate { get; set; }

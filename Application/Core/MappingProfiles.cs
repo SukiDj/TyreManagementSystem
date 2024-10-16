@@ -1,3 +1,5 @@
+using Application.Clients;
+using Application.Machines;
 using Application.Tyres;
 using AutoMapper;
 using Domain;
@@ -16,7 +18,9 @@ public class MappingProfiles : Profile
         CreateMap<ProductionOperator, ProductionOperator>();
         CreateMap<QualitySupervisor, QualitySupervisor>();
         CreateMap<Client, Client>();
+        CreateMap<Client, ClientDto>();
         CreateMap<Machine, Machine>();
+        CreateMap<Machine, MachineDto>();
         CreateMap<Report, Report>();
         CreateMap<Sale, Sale>();
         CreateMap<Production, Production>();

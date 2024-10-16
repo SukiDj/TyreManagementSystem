@@ -31,6 +31,7 @@ namespace Application.Productions
                     .Where(p => p.Operator.Id == productionOperator.Id)
                     .Select(p => new ProductionDto
                     {
+                        Id = p.Id,
                         TyreCode = p.Tyre.Code.ToString(),
                         QuantityProduced = p.QuantityProduced,
                         ProductionDate = p.ProductionDate,
