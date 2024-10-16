@@ -2,7 +2,6 @@ using Application.Productions;
 using Application.Sales;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Persistence;
 
 namespace API.Controllers
 {

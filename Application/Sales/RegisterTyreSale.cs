@@ -2,6 +2,7 @@ using Application.Actions;
 using Application.Core;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Sales
@@ -10,14 +11,7 @@ namespace Application.Sales
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid TyreId { get; set; }
-            public Guid ClientId { get; set; }
-            public int QuantitySold { get; set; }
-            public double PricePerUnit { get; set; }
-            public string UnitOfMeasure { get; set; }
-            public DateTime SaleDate { get; set; }
-            public Guid ProductionOrderId { get; set; }
-            public string TargetMarket { get; set; }
+            public RegisterTyreSaleDto Sale { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -33,14 +27,14 @@ namespace Application.Sales
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var tyre = await _context.Tyres.FindAsync(request.TyreId);
+                var tyre = await _context.Tyres.FirstOrDefaultAsync(t => t.Code == request.Sale.TyreId);
 
                 if (tyre == null)
                 {
                     return Result<Unit>.Failure("Invalid references for Tyre");
                 }
 
-                var client = await _context.Clients.FindAsync(request.ClientId);
+                var client = await _context.Clients.FindAsync(request.Sale.ClientId);
 
                 if (client == null)
                 {
@@ -51,12 +45,12 @@ namespace Application.Sales
                 {
                     Tyre = tyre,
                     Client = client,
-                    SaleDate = request.SaleDate,
-                    QuantitySold = request.QuantitySold,
-                    PricePerUnit = request.PricePerUnit,
-                    UnitOfMeasure = request.UnitOfMeasure,
-                    TargetMarket = request.TargetMarket,
-                    Production = await _context.Productions.FindAsync(request.ProductionOrderId)
+                    SaleDate = request.Sale.SaleDate,
+                    QuantitySold = request.Sale.QuantitySold,
+                    PricePerUnit = request.Sale.PricePerUnit,
+                    UnitOfMeasure = request.Sale.UnitOfMeasure,
+                    TargetMarket = request.Sale.TargetMarket,
+                    Production = await _context.Productions.FindAsync(request.Sale.ProductionOrderId)
                 };
 
                 if (sale.Tyre == null || sale.Client == null)
@@ -70,7 +64,7 @@ namespace Application.Sales
 
                 if (!result) return Result<Unit>.Failure("Failed to register sale");
 
-                await _actionLogger.LogActionAsync("RegisterSale", $"Sale registered for TyreId: {request.TyreId}, ClientId: {request.ClientId}");
+                await _actionLogger.LogActionAsync("RegisterSale", $"Sale registered for TyreId: {request.Sale.TyreId}, ClientId: {request.Sale.ClientId}");
 
                 return Result<Unit>.Success(Unit.Value);
             }
