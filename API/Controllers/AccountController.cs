@@ -81,15 +81,57 @@ public class AccountController : ControllerBase
             return ValidationProblem();
         }
 
-        var user = new User
+        User user;
+        switch (registerDto.Role)
         {
-            Ime = registerDto.Ime,
-            Prezime = registerDto.Prezime,
-            Email = registerDto.Email,
-            UserName = registerDto.Username,
-            Telefon = registerDto.Telefon,
-            DatumRodjenja = registerDto.DatumRodjenja
-        };
+            case "ProductionOperator":
+                user = new ProductionOperator
+                {
+                    Ime = registerDto.Ime,
+                    Prezime = registerDto.Prezime,
+                    Email = registerDto.Email,
+                    UserName = registerDto.Username,
+                    Telefon = registerDto.Telefon,
+                    DatumRodjenja = registerDto.DatumRodjenja
+                };
+                break;
+
+            case "QualitySupervisor":
+                user = new QualitySupervisor
+                {
+                    Ime = registerDto.Ime,
+                    Prezime = registerDto.Prezime,
+                    Email = registerDto.Email,
+                    UserName = registerDto.Username,
+                    Telefon = registerDto.Telefon,
+                    DatumRodjenja = registerDto.DatumRodjenja
+                };
+                break;
+
+            case "BusinessUnitLeader":
+                user = new BusinessUnitLeader
+                {
+                    Ime = registerDto.Ime,
+                    Prezime = registerDto.Prezime,
+                    Email = registerDto.Email,
+                    UserName = registerDto.Username,
+                    Telefon = registerDto.Telefon,
+                    DatumRodjenja = registerDto.DatumRodjenja
+                };
+                break;
+
+            default:
+                user = new User
+                {
+                    Ime = registerDto.Ime,
+                    Prezime = registerDto.Prezime,
+                    Email = registerDto.Email,
+                    UserName = registerDto.Username,
+                    Telefon = registerDto.Telefon,
+                    DatumRodjenja = registerDto.DatumRodjenja
+                };
+                break;
+        }
 
         var result = await _userManager.CreateAsync(user, registerDto.Password);//da sacuvamo usera u bazu
 
