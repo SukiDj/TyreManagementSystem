@@ -1,5 +1,6 @@
 using Application.Productions;
 using Application.Sales;
+using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,36 +10,15 @@ namespace API.Controllers
     public class QualitySupervisorController : BaseApiController
     {
         [HttpPost("registerTyreSale")]
-        public async Task<IActionResult> RegisterTyreSale(
-            Guid tyreId, 
-            Guid clientId, 
-            int quantitySold, 
-            double pricePerUnit, 
-            string unitOfMeasure, 
-            DateTime saleDate, 
-            Guid productionOrderId, 
-            string targetMarket)
+        public async Task<IActionResult> RegisterTyreSale([FromForm]RegisterTyreSaleDto sale)
         {
-            var command = new RegisterTyreSale.Command
-            {
-                TyreId = tyreId,
-                ClientId = clientId,
-                QuantitySold = quantitySold,
-                PricePerUnit = pricePerUnit,
-                UnitOfMeasure = unitOfMeasure,
-                SaleDate = saleDate,
-                ProductionOrderId = productionOrderId,
-                TargetMarket = targetMarket
-            };
-
-            return HandleResult(await Mediator.Send(command));
+            return HandleResult(await Mediator.Send(new RegisterTyreSale.Command{ Sale = sale}));
         }
-
 
         [HttpGet("submissionHistory")]
         public async Task<IActionResult> GetSubmissionHistory()
         {
-            var productionHistory = await Mediator.Send(new ListProductionHistory.Query());
+            var productionHistory = await Mediator.Send(new ListAllProductionHistory.Query());
             var salesHistory = await Mediator.Send(new ListSalesHistory.Query());
 
             return Ok(new 

@@ -1,12 +1,11 @@
 using Application.Core;
-using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Productions
 {
-    public class ListProductionHistory
+    public class ListAllProductionHistory
     {
         public class Query : IRequest<Result<List<ProductionDto>>>
         {
@@ -15,20 +14,14 @@ namespace Application.Productions
         public class Handler : IRequestHandler<Query, Result<List<ProductionDto>>>
         {
             private readonly DataContext _context;
-            private readonly IUserAccessor _userAccessor;
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            public Handler(DataContext context)
             {
                 _context = context;
-                _userAccessor = userAccessor;
             }
 
             public async Task<Result<List<ProductionDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var productionOperator = _context.ProductionOperators.FirstOrDefault(x => 
-                    x.UserName == _userAccessor.GetUsername());
-
                 var history = await _context.Productions
-                    .Where(p => p.Operator.Id == productionOperator.Id)
                     .Select(p => new ProductionDto
                     {
                         TyreCode = p.Tyre.Code.ToString(),

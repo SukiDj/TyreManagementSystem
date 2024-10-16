@@ -26,5 +26,7 @@ public class RegisterDto
 
     [Required]
     public DateTime DatumRodjenja { get; set; }
+    [Required]
+    public string Role { get; set; }
     
 }

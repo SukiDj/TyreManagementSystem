@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Productions
@@ -13,19 +14,15 @@ namespace Application.Productions
         public class Command : IRequest<Result<Unit>>
         {
             public Guid TyreId { get; set; }
-            //public Guid OperatorId { get; set; }
-            public Guid SupervisorId { get; set; }
             public Guid MachineId { get; set; }
             public int Shift { get; set; }
             public int QuantityProduced { get; set; }
-            //public int ProdOrderID { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                
             }
         }
 
@@ -46,22 +43,26 @@ namespace Application.Productions
                 var productionOperator = _context.ProductionOperators.FirstOrDefault(x => 
                     x.UserName == _userAccessor.GetUsername());
 
-                if(productionOperator ==null) return Result<Unit>.Failure("Nije pronadjen vodic!");
+                if(productionOperator ==null) return Result<Unit>.Failure("Nije pronadjen operater!");
+
+                var machine = await _context.Machines.FindAsync(request.MachineId);
+                
+                var tyre = await _context.Tyres.FirstOrDefaultAsync(t => t.Code == request.TyreId);
 
                 var production = new Production
                 {
-                    Tyre = await _context.Tyres.FindAsync(request.TyreId),
+                    Tyre = tyre,
                     Operator = productionOperator,
-                    Supervisor = await _context.QualitySupervisors.FindAsync(request.SupervisorId),
-                    Machine = await _context.Machines.FindAsync(request.MachineId),
+                    //Supervisor = supervisor,
+                    Machine = machine,
                     Shift = request.Shift,
-                    QuantityProduced = request.QuantityProduced
-                    //ProdOrderID = request.ProdOrderID
+                    QuantityProduced = request.QuantityProduced,
+                    ProductionDate = DateTime.UtcNow
                 };
 
-                if (production.Tyre == null || production.Operator == null || production.Supervisor == null || production.Machine == null)
+                if (production.Tyre == null || production.Operator == null || production.Machine == null)
                 {
-                    return Result<Unit>.Failure("Invalid references for Tyre, Operator, Supervisor, or Machine");
+                    return Result<Unit>.Failure("Invalid references for Tyre, Operator, or Machine");
                 }
 
                 _context.Productions.Add(production);

@@ -13,10 +13,10 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(command));
         }
 
-        [HttpGet("history/{operatorId}")]
-        public async Task<IActionResult> GetProductionHistory(Guid operatorId)
+        [HttpGet("history")]
+        public async Task<IActionResult> GetProductionHistory()
         {
-            return HandleResult(await Mediator.Send(new ListProductionHistory.Query { OperatorId = operatorId }));
+            return HandleResult(await Mediator.Send(new ListProductionHistory.Query()));
         }
     }
 }
