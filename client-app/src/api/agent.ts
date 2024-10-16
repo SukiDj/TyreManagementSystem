@@ -3,14 +3,11 @@ import { store } from '../app/stores/store';
 import { PaginatedResult } from "../app/models/Pagination";
 import { router } from '../app/router/Routes';
 import { toast } from 'react-toastify';
-<<<<<<< HEAD
-import { RegisterUserFormValues, User, UserFormValues } from '../app/models/User';
-=======
+import { RegisterUserFormValues} from '../app/models/User';
 import { User, UserFormValues } from '../app/models/User';
 import { ProductionData } from '../app/models/Production';
 import { SalesData } from '../app/models/Sale';
 import { ProductionRecord } from '../app/models/ProductionRecord';
->>>>>>> a9e69f4642733c262ac6514e06bbb7e769759c2c
 
 const sleep =(delay: number) =>{
     return new Promise((resolve)=>{
