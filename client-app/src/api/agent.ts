@@ -3,7 +3,14 @@ import { store } from '../app/stores/store';
 import { PaginatedResult } from "../app/models/Pagination";
 import { router } from '../app/router/Routes';
 import { toast } from 'react-toastify';
+<<<<<<< HEAD
 import { RegisterUserFormValues, User, UserFormValues } from '../app/models/User';
+=======
+import { User, UserFormValues } from '../app/models/User';
+import { ProductionData } from '../app/models/Production';
+import { SalesData } from '../app/models/Sale';
+import { ProductionRecord } from '../app/models/ProductionRecord';
+>>>>>>> a9e69f4642733c262ac6514e06bbb7e769759c2c
 
 const sleep =(delay: number) =>{
     return new Promise((resolve)=>{
@@ -89,14 +96,36 @@ const requests = {
     del: <T>(url:string)=> axios.delete<T>(url).then(responseBody)
 }
 
+const Records = {
+    registerProduction: (productionData: { shift: number, quantityProduced: number, tyreId: string }) =>
+        requests.post<void>('/ProductionOperator/registerProduction', productionData),
+        
+    updateProduction: (id: string, productionUpdate: { shift: number, quantityProduced: number, tyreId: string }) =>
+        requests.put<void>(`/QualitySupervisor/updateProduction/${id}`, productionUpdate),
+        
+    getProductionHistory: (operatorId: string) => axios.get<ProductionRecord[]>(`/ProductionOperator/history/${operatorId}`)
+}
+
 const Account = {
     login: (user:UserFormValues) => requests.post<User>('/Account/login', user),
     refreshToken: () => requests.post<User>('/Account/refreshToken/', {}),
     register: (user: RegisterUserFormValues) => requests.post<User>('/Account/register', user)
 }
 
+const BusinessUnit = {
+    getProductionData: (): Promise<ProductionData[]> => requests.get(`/businessunit/getProductions`),
+    getSalesData: (): Promise<SalesData[]> => requests.get(`/businessunit/getSales`),
+    productionByDay: (date: Date) => requests.get(`/businessunit/productionByDay?date=${date.toISOString()}`),
+    productionByShift: (shift: number) => requests.get(`/businessunit/productionByShift?shift=${shift}`),
+    productionByMachine: (machineId: string) => requests.get(`/businessunit/productionByMachine?machineId=${machineId}`),
+    productionByOperator: (operatorId: string) => requests.get(`/businessunit/productionByOperator?operatorId=${operatorId}`),
+    stockBalance: (date: Date) => requests.get(`/businessunit/stockBalance?date=${date.toISOString()}`)
+};
+
 const agent = {
-    Account
-}
+    Account,
+    Records,
+    BusinessUnit
+};
 
 export default agent;

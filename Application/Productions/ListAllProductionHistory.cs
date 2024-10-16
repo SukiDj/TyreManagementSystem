@@ -5,17 +5,15 @@ using Persistence;
 
 namespace Application.Productions
 {
-    public class GetProductionByOperator
+    public class ListAllProductionHistory
     {
         public class Query : IRequest<Result<List<ProductionDto>>>
         {
-            public Guid OperatorId { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<List<ProductionDto>>>
         {
             private readonly DataContext _context;
-
             public Handler(DataContext context)
             {
                 _context = context;
@@ -23,19 +21,19 @@ namespace Application.Productions
 
             public async Task<Result<List<ProductionDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var productions = await _context.Productions
-                    .Where(p => p.Operator.Id == request.OperatorId)
+                var history = await _context.Productions
                     .Select(p => new ProductionDto
                     {
                         TyreCode = p.Tyre.Code.ToString(),
-                        Shift = p.Shift,
                         QuantityProduced = p.QuantityProduced,
+                        ProductionDate = p.ProductionDate,
+                        Shift = p.Shift,
                         MachineNumber = p.Machine.Id.ToString(),
-                        ProductionDate = p.ProductionDate
+                        OperatorId = p.Operator.Id.ToString()
                     })
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync();
 
-                return Result<List<ProductionDto>>.Success(productions);
+                return Result<List<ProductionDto>>.Success(history);
             }
         }
     }

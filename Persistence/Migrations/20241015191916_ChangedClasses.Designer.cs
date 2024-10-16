@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241015191916_ChangedClasses")]
+    partial class ChangedClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -125,6 +128,9 @@ namespace Persistence.Migrations
                     b.Property<int>("Shift")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("SupervisorId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("TyreCode")
                         .HasColumnType("TEXT");
 
@@ -133,6 +139,8 @@ namespace Persistence.Migrations
                     b.HasIndex("MachineId");
 
                     b.HasIndex("OperatorId");
+
+                    b.HasIndex("SupervisorId");
 
                     b.HasIndex("TyreCode");
 
@@ -472,6 +480,10 @@ namespace Persistence.Migrations
                         .WithMany("Productions")
                         .HasForeignKey("OperatorId");
 
+                    b.HasOne("Domain.QualitySupervisor", "Supervisor")
+                        .WithMany("Productions")
+                        .HasForeignKey("SupervisorId");
+
                     b.HasOne("Domain.Tyre", "Tyre")
                         .WithMany("Productions")
                         .HasForeignKey("TyreCode");
@@ -479,6 +491,8 @@ namespace Persistence.Migrations
                     b.Navigation("Machine");
 
                     b.Navigation("Operator");
+
+                    b.Navigation("Supervisor");
 
                     b.Navigation("Tyre");
                 });
@@ -617,6 +631,11 @@ namespace Persistence.Migrations
                 });
 
             modelBuilder.Entity("Domain.ProductionOperator", b =>
+                {
+                    b.Navigation("Productions");
+                });
+
+            modelBuilder.Entity("Domain.QualitySupervisor", b =>
                 {
                     b.Navigation("Productions");
                 });

@@ -1,4 +1,5 @@
 using Application.Core;
+using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -9,28 +10,33 @@ namespace Application.Productions
     {
         public class Query : IRequest<Result<List<ProductionDto>>>
         {
-            public Guid OperatorId { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<List<ProductionDto>>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 _context = context;
+                _userAccessor = userAccessor;
             }
 
             public async Task<Result<List<ProductionDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var productionOperator = _context.ProductionOperators.FirstOrDefault(x => 
+                    x.UserName == _userAccessor.GetUsername());
+
                 var history = await _context.Productions
-                    .Where(p => p.Operator.Id == request.OperatorId)
+                    .Where(p => p.Operator.Id == productionOperator.Id)
                     .Select(p => new ProductionDto
                     {
                         TyreCode = p.Tyre.Code.ToString(),
                         QuantityProduced = p.QuantityProduced,
-                        ProductionDate = p.Tyre.ProductionDate,
+                        ProductionDate = p.ProductionDate,
                         Shift = p.Shift,
-                        MachineNumber = p.Machine.Id.ToString()
+                        MachineNumber = p.Machine.Id.ToString(),
+                        OperatorId = p.Operator.Id.ToString()
                     })
                     .ToListAsync();
 

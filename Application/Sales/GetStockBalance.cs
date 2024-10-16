@@ -27,7 +27,13 @@ namespace Application.Sales
                     .Select(t => new StockBalanceDto
                     {
                         TyreCode = t.Code.ToString(),
-                        StockBalance = t.Productions.Sum(p => p.QuantityProduced) - t.Sales.Sum(s => s.QuantitySold)
+                        // Suma proizvodnje do datog datuma
+                        StockBalance = t.Productions
+                                        .Where(p => p.ProductionDate <= request.Date)
+                                        .Sum(p => p.QuantityProduced)
+                                      - t.Sales
+                                        .Where(s => s.SaleDate <= request.Date)
+                                        .Sum(s => s.QuantitySold)
                     })
                     .ToListAsync(cancellationToken);
 

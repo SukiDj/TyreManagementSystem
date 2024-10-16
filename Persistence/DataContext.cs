@@ -71,9 +71,9 @@ namespace Persistence
                 .HasOne(r => r.BusinessUnitLeader)
                 .WithMany(b => b.Reports);
             
-            builder.Entity<Production>()
-                .HasOne(p => p.Supervisor)
-                .WithMany(q => q.Production);
+            // builder.Entity<Production>()
+            //     .HasOne(p => p.Supervisor)
+            //     .WithMany(q => q.Productions);
         }
     }
 }
