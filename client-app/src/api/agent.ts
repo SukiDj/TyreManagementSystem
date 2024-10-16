@@ -3,7 +3,7 @@ import { store } from '../app/stores/store';
 import { PaginatedResult } from "../app/models/Pagination";
 import { router } from '../app/router/Routes';
 import { toast } from 'react-toastify';
-import { RegisterUserFormValues } from '../app/models/User';
+import { RegisterUserFormValues} from '../app/models/User';
 import { User, UserFormValues } from '../app/models/User';
 import { ProductionData } from '../app/models/Production';
 import { SalesData } from '../app/models/Sale';
