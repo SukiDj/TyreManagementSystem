@@ -4,6 +4,8 @@ import { PaginatedResult } from "../app/models/Pagination";
 import { router } from '../app/router/Routes';
 import { toast } from 'react-toastify';
 import { User, UserFormValues } from '../app/models/User';
+import { ProductionData } from '../app/models/Production';
+import { SalesData } from '../app/models/Sale';
 
 const sleep =(delay: number) =>{
     return new Promise((resolve)=>{
@@ -94,8 +96,19 @@ const Account = {
     refreshToken: () => requests.post<User>('/Account/refreshToken/', {})
 }
 
+const BusinessUnit = {
+    getProductionData: (): Promise<ProductionData[]> => requests.get(`/businessunit/getProductions`),
+    getSalesData: (): Promise<SalesData[]> => requests.get(`/businessunit/getSales`),
+    productionByDay: (date: Date) => requests.get(`/businessunit/productionByDay?date=${date.toISOString()}`),
+    productionByShift: (shift: number) => requests.get(`/businessunit/productionByShift?shift=${shift}`),
+    productionByMachine: (machineId: string) => requests.get(`/businessunit/productionByMachine?machineId=${machineId}`),
+    productionByOperator: (operatorId: string) => requests.get(`/businessunit/productionByOperator?operatorId=${operatorId}`),
+    stockBalance: (date: Date) => requests.get(`/businessunit/stockBalance?date=${date.toISOString()}`)
+};
+
 const agent = {
-    Account
-}
+    Account,
+    BusinessUnit
+};
 
 export default agent;

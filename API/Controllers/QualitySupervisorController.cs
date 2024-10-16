@@ -38,7 +38,7 @@ namespace API.Controllers
         [HttpGet("submissionHistory")]
         public async Task<IActionResult> GetSubmissionHistory()
         {
-            var productionHistory = await Mediator.Send(new ListProductionHistory.Query());
+            var productionHistory = await Mediator.Send(new ListAllProductionHistory.Query());
             var salesHistory = await Mediator.Send(new ListSalesHistory.Query());
 
             return Ok(new 

@@ -32,18 +32,18 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var korisnik = await _userManager.Users
+        var user = await _userManager.Users
             .FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
-        if (korisnik == null) return BadRequest($"Unet je netacan email: {loginDto.Email}");
+        if (user == null) return BadRequest($"Unet je netacan email: {loginDto.Email}");
 
-        var result = await _signInManager.CheckPasswordSignInAsync(korisnik, loginDto.Password, false);//aspnet ovde proverava sifru da l se poklapa za nas
+        var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);//aspnet ovde proverava sifru da l se poklapa za nas
 
         if (result.Succeeded)
         {
-            await SetRefreshToken(korisnik);
-            var korisnikObject = await CreateUserObject(korisnik);
-            return korisnikObject;
+            await SetRefreshToken(user);
+            var userObject = await CreateUserObject(user);
+            return userObject;
         }
 
         return BadRequest("Uneta sifra nije tacna");
@@ -81,7 +81,7 @@ public class AccountController : ControllerBase
             return ValidationProblem();
         }
 
-        var korisnik = new User
+        var user = new User
         {
             Ime = registerDto.Ime,
             Prezime = registerDto.Prezime,
@@ -91,40 +91,40 @@ public class AccountController : ControllerBase
             DatumRodjenja = registerDto.DatumRodjenja
         };
 
-        var result = await _userManager.CreateAsync(korisnik, registerDto.Password);//da sacuvamo korisnika u bazu
+        var result = await _userManager.CreateAsync(user, registerDto.Password);//da sacuvamo usera u bazu
 
-        if (!result.Succeeded) return BadRequest("Problem registracije korisnika");
+        if (!result.Succeeded) return BadRequest("Problem with registration");
 
-        result = await _userManager.AddToRoleAsync(korisnik, "ObicanUser");
+        result = await _userManager.AddToRoleAsync(user, registerDto.Role);
         
-        if (!result.Succeeded) return BadRequest("Problem dodavanja role korisniku");
+        if (!result.Succeeded) return BadRequest("Problem with adding role to user");
 
-        return Ok("Registracija uspesna");
+        return Ok("Registration succesfull");
     }
 
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        var korisnik = await _userManager.Users
+        var user = await _userManager.Users
             .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
-        if(korisnik != null){
-            await SetRefreshToken(korisnik);// NOVO
+        if(user != null){
+            await SetRefreshToken(user);// NOVO
         }
-        var korisnikObject = await CreateUserObject(korisnik);
-        return korisnikObject;
+        var userObject = await CreateUserObject(user);
+        return userObject;
     }
 
-    private async Task<UserDto> CreateUserObject(User korisnik)
+    private async Task<UserDto> CreateUserObject(User user)
     {
-        var roles = await _userManager.GetRolesAsync(korisnik);
+        var roles = await _userManager.GetRolesAsync(user);
 
         return new UserDto
         {
-            Ime = korisnik.Ime,
-            Prezime = korisnik.Prezime,
-            Token = await _tokenService.CreateToken(korisnik),
-            UserName = korisnik.UserName
+            Ime = user.Ime,
+            Prezime = user.Prezime,
+            Token = await _tokenService.CreateToken(user),
+            UserName = user.UserName
         };
     }
     
@@ -170,8 +170,8 @@ public class AccountController : ControllerBase
 
         if (oldToken != null && !oldToken.IsActive) return Unauthorized();
 
-        var korisnikObject = await CreateUserObject(user);
-        return korisnikObject;
+        var userObject = await CreateUserObject(user);
+        return userObject;
     }
 
     private async Task SetRefreshToken(User user)

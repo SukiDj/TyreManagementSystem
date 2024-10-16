@@ -12,5 +12,6 @@ namespace Application.Productions
         public DateTime ProductionDate { get; set; }
         public int Shift { get; set; }
         public string MachineNumber { get; set; }
+        public string OperatorId { get; set; }
     }
 }

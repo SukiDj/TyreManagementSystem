@@ -33,10 +33,24 @@ namespace Application.Sales
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                var tyre = await _context.Tyres.FindAsync(request.TyreId);
+
+                if (tyre == null)
+                {
+                    return Result<Unit>.Failure("Invalid references for Tyre");
+                }
+
+                var client = await _context.Clients.FindAsync(request.ClientId);
+
+                if (client == null)
+                {
+                    return Result<Unit>.Failure("Invalid references for Client");
+                }
+
                 var sale = new Sale
                 {
-                    Tyre = await _context.Tyres.FindAsync(request.TyreId),
-                    Client = await _context.Clients.FindAsync(request.ClientId),
+                    Tyre = tyre,
+                    Client = client,
                     SaleDate = request.SaleDate,
                     QuantitySold = request.QuantitySold,
                     PricePerUnit = request.PricePerUnit,

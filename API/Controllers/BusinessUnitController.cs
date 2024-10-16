@@ -9,6 +9,17 @@ namespace API.Controllers
     [AllowAnonymous]
     public class BusinessUnitController : BaseApiController
     {
+        [HttpGet("getProductions")]
+        public async Task<IActionResult> getProductions()
+        {
+            return HandleResult(await Mediator.Send(new ListAllProductionHistory.Query()));
+        }
+        [HttpGet("getSales")]
+        public async Task<IActionResult> getSales()
+        {
+            return HandleResult(await Mediator.Send(new ListSalesHistory.Query()));
+        }
+
         [HttpGet("productionByDay")]
         public async Task<IActionResult> GetProductionByDay(DateTime date)
         {
