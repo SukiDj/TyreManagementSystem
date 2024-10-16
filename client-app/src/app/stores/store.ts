@@ -3,11 +3,13 @@ import userStore from "./userStore";
 import CommonStore from "./commonStore";
 import ModalStore from "./modalStore";
 import BusinessUnitStore from "./businessUnitStore";
+import RecordStore from "./productionRecordStore";
 
 interface Store{
     commonStore : CommonStore;
     modalStore: ModalStore;
     userStore: userStore;
+    recordStore: RecordStore
     businessUnitStore: BusinessUnitStore;
 }
 
@@ -15,7 +17,8 @@ export const store: Store = {
     commonStore : new CommonStore(),
     modalStore: new ModalStore(),
     userStore: new userStore(),
-    businessUnitStore: new BusinessUnitStore()
+    businessUnitStore: new BusinessUnitStore(),
+    recordStore: new RecordStore()
 }
 
 export const StoreContext = createContext(store);

@@ -16,6 +16,16 @@ export interface Role {
     concurrencyStamp: any;
 }
 
+export interface RegisterUserFormValues {
+    email:string;
+    password: string;
+    ime: string;
+    prezime: string;
+    username: string;
+    telefon: string;
+    datumRodjenja: Date;
+  }
+
 export interface UserFormValues {
     email:string;
     password: string;

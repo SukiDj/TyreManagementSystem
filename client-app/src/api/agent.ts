@@ -3,9 +3,11 @@ import { store } from '../app/stores/store';
 import { PaginatedResult } from "../app/models/Pagination";
 import { router } from '../app/router/Routes';
 import { toast } from 'react-toastify';
+import { RegisterUserFormValues} from '../app/models/User';
 import { User, UserFormValues } from '../app/models/User';
 import { ProductionData } from '../app/models/Production';
 import { SalesData } from '../app/models/Sale';
+import { ProductionRecord } from '../app/models/ProductionRecord';
 
 const sleep =(delay: number) =>{
     return new Promise((resolve)=>{
@@ -91,9 +93,20 @@ const requests = {
     del: <T>(url:string)=> axios.delete<T>(url).then(responseBody)
 }
 
+const Records = {
+    registerProduction: (productionData: { shift: number, quantityProduced: number, tyreId: string }) =>
+        requests.post<void>('/ProductionOperator/registerProduction', productionData),
+        
+    updateProduction: (id: string, productionUpdate: { shift: number, quantityProduced: number, tyreId: string }) =>
+        requests.put<void>(`/QualitySupervisor/updateProduction/${id}`, productionUpdate),
+        
+    getProductionHistory: (operatorId: string) => axios.get<ProductionRecord[]>(`/ProductionOperator/history`)
+}
+
 const Account = {
     login: (user:UserFormValues) => requests.post<User>('/Account/login', user),
-    refreshToken: () => requests.post<User>('/Account/refreshToken/', {})
+    refreshToken: () => requests.post<User>('/Account/refreshToken/', {}),
+    register: (user: RegisterUserFormValues) => requests.post<User>('/Account/register', user)
 }
 
 const BusinessUnit = {
@@ -108,6 +121,7 @@ const BusinessUnit = {
 
 const agent = {
     Account,
+    Records,
     BusinessUnit
 };
 
