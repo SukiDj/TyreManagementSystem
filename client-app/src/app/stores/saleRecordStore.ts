@@ -1,13 +1,13 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { ProductionRecord, RecordFromValues } from "../models/ProductionRecord";
+import { SaleRecord, SaleRecordFromValues } from "../models/SaleRecord";
 import agent from "../../api/agent";
 import { format } from "date-fns";
 import { Pagination, PagingParams } from "../models/Pagination";
 import { store } from "./store";
 
 export default class RecordStore {
-    recordRegistry = new Map<string, ProductionRecord>();
-    selectedRecord: ProductionRecord | undefined = undefined;
+    recordRegistry = new Map<string, SaleRecord>();
+    selectedRecord: SaleRecord | undefined = undefined;
     isSubmitting = false;
     loadingInitial = false;
     pagingParams = new PagingParams();
@@ -36,13 +36,13 @@ export default class RecordStore {
         this.loadingNext = state;  
     }
 
-    createRecord = async (record: RecordFromValues) => {
+    createRecord = async (record: SaleRecordFromValues) => {
         this.isSubmitting = true;
         try {
             
 
-            await agent.ProductionOperator.registerProduction(record);
-            const newRecord = new ProductionRecord(record);
+            await agent.QualitySupervisor.registerSale(record);
+            const newRecord = new SaleRecord(record);
             console.log(newRecord);
             runInAction(() => {
                 this.recordRegistry.set(newRecord.id!, newRecord);
@@ -57,21 +57,25 @@ export default class RecordStore {
         }
     };
 
-    updateRecord = async (record: RecordFromValues) => {
+    updateRecord = async (record: SaleRecordFromValues) => {
         try {
-            const productionUpdate = {
-                shift: record.shift,
-                quantityProduced: record.quantityProduced,
-                tyreId: record.tyreId
+            const saleUpdate = {
+                pricePerUnit: record.pricePerUnit,
+                quantitySold: record.quantitySold,
+                unitOfMeasure: record.unitOfMeasure,
+                tyreId: record.tyreId,
+                clientId: record.clientId,
+                productionOrderId: record.productionOrderId,
+                targetMarket: record.targetMarket
             };
 
-            await agent.Records.updateProduction(record.id!, productionUpdate);
+            await agent.Records.updateSale(record.id!, saleUpdate);
 
             runInAction(() => {
                 if (record.id) {
                     const updatedRecord = { ...this.getRecord(record.id), ...record };
-                    this.recordRegistry.set(record.id, updatedRecord as ProductionRecord);
-                    this.selectedRecord = updatedRecord as ProductionRecord;
+                    this.recordRegistry.set(record.id, updatedRecord as SaleRecord);
+                    this.selectedRecord = updatedRecord as SaleRecord;
                 }
             });
         } catch (error) {
@@ -86,44 +90,28 @@ export default class RecordStore {
     get groupedRecords() {
         return Object.entries(
             Array.from(this.recordRegistry.values()).reduce((records, record) => {
-                const date = format(record.productionDate!, 'dd MMM yyyy'); 
+                const date = format(record.saleDate!, 'dd MMM yyyy'); 
                 records[date] = records[date] ? [...records[date], record] : [record];
                 return records;
-            }, {} as { [key: string]: ProductionRecord[] }) 
+            }, {} as { [key: string]: SaleRecord[] }) 
         );
     }
 
-    private setRecord = (record:ProductionRecord)=>{
+    private setRecord = (record:SaleRecord)=>{
         const user = store.userStore.user;
         if(user){
             
         }
-        record.productionDate = new Date(record.productionDate!);
+        record.saleDate = new Date(record.saleDate!);
         this.recordRegistry.set(record.id!,record);
     }
 
     
 
-    loadProductionRecords = async (userId: string) => {
+    loadSaleRecords = async () => {
         this.setLoadingInitial(true);
         try {
-            const result = await agent.Records.getProductionHistory(userId);
-            console.log(result);
-            result.data.forEach(record => {
-                this.setRecord(record); 
-            });
-            //this.setPagination(result.pagination); // Set pagination if applicable
-            this.setLoadingInitial(false); // Set loading state to false after loading is complete
-        } catch (error) {
-            console.log(error); // Log any errors
-            this.setLoadingInitial(false); // Ensure the loading state is reset even if an error occurs
-        }
-    }
-
-    loadAllProductionRecords = async () => {
-        this.setLoadingInitial(true);
-        try {
-            const result = await agent.Records.getAllProductionHistory();
+            const result = await agent.Records.getAllSaleHistory();
             console.log(result);
             result.data.forEach(record => {
                 this.setRecord(record); 

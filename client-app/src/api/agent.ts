@@ -10,6 +10,8 @@ import { SalesData } from '../app/models/Sale';
 import { ProductionRecord, RecordFromValues } from '../app/models/ProductionRecord';
 import { Tyre } from '../app/models/tyre';
 import { Machine } from '../app/models/Machine';
+import { SaleRecord, SaleRecordFromValues } from '../app/models/SaleRecord';
+import { Client } from '../app/models/Client';
 
 const sleep =(delay: number) =>{
     return new Promise((resolve)=>{
@@ -96,13 +98,31 @@ const requests = {
 }
 
 const Records = {
-    registerProduction: (productionData: { shift: number, quantityProduced: number, tyreId: string }) =>
+    registerProduction: (productionData: { shift: number, quantityProduced: number, tyreId: string, machineId: string }) =>
         requests.post<void>('/ProductionOperator/registerProduction', productionData),
+
+    registerSale: (saleData: { 
+        pricePerUnit: number; 
+        clientId: string; 
+        quantitySold: number; 
+        tyreId: string; 
+        productionOrderId: string; 
+        unitOfMeasure: string; 
+        targetMarket: string; 
+    }) =>
+        requests.post<void>('/QualitySupervisor/registerTyreSale', saleData),    
         
     updateProduction: (id: string, productionUpdate: { shift: number, quantityProduced: number, tyreId: string }) =>
         requests.put<void>(`/QualitySupervisor/updateProduction/${id}`, productionUpdate),
+
+    updateSale: (id: string, saleUpdate: { pricePerUnit: number, clientId: string, quantitySold: number, tyreId: string }) =>
+        requests.put<void>(`/QualitySupervisor/updateSale/${id}`, saleUpdate),
         
-    getProductionHistory: (operatorId: string) => axios.get<ProductionRecord[]>(`/ProductionOperator/history`)
+    getProductionHistory: (operatorId: string) => axios.get<ProductionRecord[]>(`/ProductionOperator/history`),
+
+    getAllProductionHistory: () => axios.get<ProductionRecord[]>(`/QualitySupervisor/productionHistory`),
+
+    getAllSaleHistory: () => axios.get<SaleRecord[]>(`/QualitySupervisor/saleHistory`)
 }
 
 const Account = {
@@ -125,6 +145,10 @@ const ProductionOperator ={
     registerProduction: (production:RecordFromValues) => requests.post<void>(`/ProductionOperator/registerProduction`, production)
 }
 
+const QualitySupervisor ={
+    registerSale: (sale:SaleRecordFromValues) => requests.post<void>(`/QualitySupervisor/registerTyreSale`, sale)
+}
+
 const Tyres = {
     getTyres: () => requests.get<Tyre[]>('/Tyre/GetTyres')
 }
@@ -133,13 +157,19 @@ const Machines = {
     getMachines: () => requests.get<Machine[]>('/Machine/GetMachines')
 }
 
+const Clients = {
+    getClients: () => requests.get<Client[]>('/Client/GetClients')
+}
+
 const agent = {
     Account,
     Records,
     BusinessUnit,
     Tyres,
     Machines,
-    ProductionOperator
+    Clients,
+    ProductionOperator,
+    QualitySupervisor
 };
 
 export default agent;

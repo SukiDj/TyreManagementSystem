@@ -37,7 +37,7 @@ loadMachines = async () => {
 get machineOptions() {
     return Array.from(this.machineRegistry.values()).map((machine) => ({
       key: machine.id,      
-      text: machine.id,     
+      text: machine.name,     
       value: machine.id,    
     }));
   }

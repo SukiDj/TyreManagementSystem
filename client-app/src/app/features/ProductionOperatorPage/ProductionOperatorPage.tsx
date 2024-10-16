@@ -74,7 +74,7 @@ export default observer(function ProductionDashboard() {
         {/* Form for creating a new production record */}
         <Form onSubmit={handleSubmit}>
           <Form.Field>
-            <label>Machine Number</label>
+            <label>Machine</label>
             <Dropdown 
             placeholder='Select Machine' 
             fluid
@@ -88,7 +88,7 @@ export default observer(function ProductionDashboard() {
                />
           </Form.Field>
           <Form.Field>
-            <label>Tyre Code</label>
+            <label>Tyre Name</label>
             <Dropdown placeholder='Select Tyre' 
             fluid
              selection 

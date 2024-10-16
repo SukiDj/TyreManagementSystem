@@ -28,6 +28,18 @@ namespace API.Controllers
             });
         }
 
+        [HttpGet("productionHistory")]
+        public async Task<IActionResult> GetProductionHistory()
+        {
+            return HandleResult(await Mediator.Send(new ListAllProductionHistory.Query()));
+        }
+        
+        [HttpGet("saleHistory")]
+        public async Task<IActionResult> GetSaleHistory()
+        {
+            return HandleResult(await Mediator.Send(new ListSalesHistory.Query()));
+        }
+
         [HttpPut("updateProduction/{id}")]
         public async Task<IActionResult> UpdateProduction(Guid id, int shift, int quantityProduced, Guid tyreId)
         {

@@ -37,7 +37,7 @@ loadTyres = async () => {
 get tyreOptions() {
     return Array.from(this.tyreRegistry.values()).map((tyre) => ({
       key: tyre.code,      // Unique key
-      text: tyre.code,     // Displayed in the dropdown
+      text: tyre.name,     // Displayed in the dropdown
       value: tyre.code,    // Value to be selected
     }));
   }
