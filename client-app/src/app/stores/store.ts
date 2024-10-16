@@ -5,6 +5,8 @@ import ModalStore from "./modalStore";
 import BusinessUnitStore from "./businessUnitStore";
 import RecordStore from "./productionRecordStore";
 import tyreStore from "./tyreStore";
+import machineStore from "./machineStore";
+import productionRecordStore from "./productionRecordStore";
 
 interface Store{
     commonStore : CommonStore;
@@ -13,6 +15,8 @@ interface Store{
     recordStore: RecordStore
     businessUnitStore: BusinessUnitStore;
     tyreStore: tyreStore;
+    machineStore: machineStore;
+    productionRecordStore: productionRecordStore;
 }
 
 export const store: Store = {
@@ -21,7 +25,9 @@ export const store: Store = {
     userStore: new userStore(),
     businessUnitStore: new BusinessUnitStore(),
     recordStore: new RecordStore(),
-    tyreStore: new tyreStore()
+    tyreStore: new tyreStore(),
+    machineStore: new machineStore(),
+    productionRecordStore: new productionRecordStore()
 }
 
 export const StoreContext = createContext(store);

@@ -39,15 +39,11 @@ export default class RecordStore {
     createRecord = async (record: RecordFromValues) => {
         this.isSubmitting = true;
         try {
-            const productionData = {
-                shift: record.productionShift,
-                quantityProduced: record.quantityProduced,
-                tyreId: record.tyreCode
-            };
+            
 
-            await agent.Records.registerProduction(productionData);
+            await agent.ProductionOperator.registerProduction(record);
             const newRecord = new ProductionRecord(record);
-
+            console.log(newRecord);
             runInAction(() => {
                 this.recordRegistry.set(newRecord.id!, newRecord);
                 this.selectedRecord = newRecord;

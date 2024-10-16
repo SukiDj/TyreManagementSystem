@@ -1,9 +1,9 @@
 import { makeAutoObservable } from 'mobx';
-import { Tyre } from '../models/tyre';
 import agent from '../../api/agent';
+import { Machine } from '../models/Machine';
 
 export default class tyreStore {
-  machineRegistry = new Map<string, Tyre>();
+  machineRegistry = new Map<string, Machine>();
   loadingInitial = false;
 
 
@@ -14,16 +14,16 @@ setLoadingInitial = (state: boolean) =>{
     this.loadingInitial = state;
 }
 
-setTyre = (tyre: Tyre) => {
-    this.machineRegistry.set(tyre.code, tyre);
+setMachine = (machine: Machine) => {
+    this.machineRegistry.set(machine.id, machine);
 }
-loadTyres = async () => {
+loadMachines = async () => {
     this.setLoadingInitial(true);
     try {
-        const tyres :Tyre[] = await agent.Tyres.getTyres();
+        const machines :Machine[] = await agent.Machines.getMachines();
         
-        tyres.forEach(tyre => {
-                this.setTyre(tyre);
+        machines.forEach(machine => {
+                this.setMachine(machine);
             });
             this.setLoadingInitial(false);
             
@@ -34,11 +34,11 @@ loadTyres = async () => {
         
     }
 }
-get tyreOptions() {
-    return Array.from(this.machineRegistry.values()).map((tyre) => ({
-      key: tyre.code,      // Unique key
-      text: tyre.code,     // Displayed in the dropdown
-      value: tyre.code,    // Value to be selected
+get machineOptions() {
+    return Array.from(this.machineRegistry.values()).map((machine) => ({
+      key: machine.id,      
+      text: machine.id,     
+      value: machine.id,    
     }));
   }
 }

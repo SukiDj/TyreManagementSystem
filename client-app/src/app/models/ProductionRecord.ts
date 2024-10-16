@@ -1,11 +1,11 @@
 export interface ProductionRecord {
-    id: string;
+    id?: string;
     tyreCode: string;
     quantityProduced: number;
-    operatorID: string;
     productionDate: Date | null;
-    productionShift: number;
+    shift: number;
     machineNumber: number;
+    operatorId: string;
 }
 
 export class ProductionRecord implements ProductionRecord {
@@ -16,22 +16,18 @@ export class ProductionRecord implements ProductionRecord {
 
 export class RecordFromValues {
     id?: string = undefined;
-    tyreCode: string = '';
+    tyreId: string = '';
+    machineId: string = '';
+    shift: number = 0;
     quantityProduced: number = 0;
-    operatorID: string = '';
-    productionDate: Date | null = null;
-    productionShift: number = 0;
-    machineNumber: number = 0;
 
     constructor(record?: RecordFromValues) {
         if (record) {
             this.id = record.id;
-            this.tyreCode = record.tyreCode;
+            this.tyreId = record.tyreId;
             this.quantityProduced = record.quantityProduced;
-            this.operatorID = record.operatorID;
-            this.productionDate = record.productionDate;
-            this.productionShift = record.productionShift;
-            this.machineNumber = record.machineNumber;
+            this.shift = record.shift;
+            this.machineId = record.machineId;
         }
     }
 }

@@ -1,6 +1,5 @@
 export interface ProductionData {
-    id: string;
-    date: string;
+    id?: string;
     machineId: string;
     operatorId: string;
     quantity: number;

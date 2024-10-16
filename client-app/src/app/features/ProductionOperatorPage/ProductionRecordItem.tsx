@@ -18,7 +18,7 @@ export default observer(function ProductionRecordItem({ record }: Props) {
                 Machine Number: {record.machineNumber}
               </Item.Header>
               <Item.Description>
-                Operator ID: {record.operatorID}
+                Operator ID: {record.operatorId}
               </Item.Description>
               <Item.Description>
                 Tyre Code: {record.tyreCode}
@@ -31,7 +31,7 @@ export default observer(function ProductionRecordItem({ record }: Props) {
       <Segment>
         <span>
           <Icon name="calendar" /> {record.productionDate!.toDateString()}
-          <Icon name="clock" /> Shift: {record.productionShift}
+          <Icon name="clock" /> Shift: {record.shift}
         </span>
       </Segment>
 
@@ -41,15 +41,7 @@ export default observer(function ProductionRecordItem({ record }: Props) {
         </span>
       </Segment>
 
-      <Segment clearing>
-        <Button
-          as={Link}
-          to={`/production/${record.productionDate}`}
-          color="teal"
-          floated="right"
-          content="View Details"
-        />
-      </Segment>
+      
     </Segment.Group>
   );
 });
