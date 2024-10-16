@@ -100,7 +100,7 @@ const Records = {
     updateProduction: (id: string, productionUpdate: { shift: number, quantityProduced: number, tyreId: string }) =>
         requests.put<void>(`/QualitySupervisor/updateProduction/${id}`, productionUpdate),
         
-    getProductionHistory: (operatorId: string) => axios.get<ProductionRecord[]>(`/ProductionOperator/history/${operatorId}`)
+    getProductionHistory: (operatorId: string) => axios.get<ProductionRecord[]>(`/ProductionOperator/history`)
 }
 
 const Account = {
