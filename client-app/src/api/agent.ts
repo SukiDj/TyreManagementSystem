@@ -8,6 +8,7 @@ import { User, UserFormValues } from '../app/models/User';
 import { ProductionData } from '../app/models/Production';
 import { SalesData } from '../app/models/Sale';
 import { ProductionRecord } from '../app/models/ProductionRecord';
+import { Tyre } from '../app/models/tyre';
 
 const sleep =(delay: number) =>{
     return new Promise((resolve)=>{
@@ -119,10 +120,15 @@ const BusinessUnit = {
     stockBalance: (date: Date) => requests.get(`/businessunit/stockBalance?date=${date.toISOString()}`)
 };
 
+const Tyres = {
+    getTyres: () => requests.get<Tyre[]>('/Tyre/GetTyres')
+}
+
 const agent = {
     Account,
     Records,
-    BusinessUnit
+    BusinessUnit,
+    Tyres
 };
 
 export default agent;
