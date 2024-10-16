@@ -24,6 +24,7 @@ export interface RegisterUserFormValues {
     username: string;
     telefon: string;
     datumRodjenja: Date;
+    role: string;
   }
 
 export interface UserFormValues {
