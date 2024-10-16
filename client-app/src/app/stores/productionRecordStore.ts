@@ -112,6 +112,7 @@ export default class RecordStore {
         this.setLoadingInitial(true);
         try {
             const result = await agent.Records.getProductionHistory(userId);
+            console.log(result);
             result.data.forEach(record => {
                 this.setRecord(record); 
             });
