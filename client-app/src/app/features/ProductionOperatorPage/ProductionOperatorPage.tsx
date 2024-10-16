@@ -35,7 +35,7 @@ export default observer(function ProductionDashboard() {
   }
 
   return (
-    <Grid style={{ marginTop: '10em' }}>
+    <Grid style={{ marginTop: '0em' }}>
       <Grid.Column width='10'>
         {/* Form for creating a new production record */}
         <Form>
@@ -71,6 +71,9 @@ export default observer(function ProductionDashboard() {
             hasMore={!loadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
             initialLoad={false}
           >
+            <br/>
+            <br/>
+
             <ProductionList />
           </InfiniteScroll>
         )}
