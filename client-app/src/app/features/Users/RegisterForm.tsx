@@ -7,11 +7,12 @@ import { Button, Dropdown, Header } from 'semantic-ui-react';
 import TextInput from '../../common/Form/TextInput';
 import DateInput from '../../common/Form/DateInput';
 import ValidationError from '../errors/ValidationError';
+import { RegisterUserFormValues } from '../../models/User';
 
 
 export default observer (function RegisterForm() {
     const { userStore } = useStore();
-    const [registrationType, setRegistrationType] = useState('user');
+    const [registrationType, setRegistrationType] = useState('ProductionOperator');
   
     const registrationTypeOptions = [
       { key: 'ProductionOperator', text: 'ProductionOperator', value: 'ProductionOperator' },
@@ -29,6 +30,7 @@ export default observer (function RegisterForm() {
           username: '',
           telefon: '',
           datumRodjenja: new Date(),
+          role: registrationType,
           error: null,
         }}
         validationSchema={Yup.object({
@@ -40,7 +42,7 @@ export default observer (function RegisterForm() {
           datumRodjenja: Yup.date().required('Datum rođenja je obavezan').nullable(),
         })}
 
-        onSubmit={(values, { setErrors }) => {
+        onSubmit={(values:RegisterUserFormValues, { setErrors }) => {
   // Create an object with the required fields
   const user = {
     email: values.email,
@@ -50,6 +52,7 @@ export default observer (function RegisterForm() {
     username: values.username,
     telefon: values.telefon,
     datumRodjenja: values.datumRodjenja, // Make sure datumRodjenja is a Date object
+    role: values.role
   };
 
   // Pass the user object to userStore.register
@@ -67,7 +70,10 @@ export default observer (function RegisterForm() {
               selection
               options={registrationTypeOptions}
               value={registrationType}
-              onChange={(_e, { value }) => setRegistrationType(value as string)}
+              onChange={(_e, { value }) => {
+                setRegistrationType(value as string);
+                setFieldValue('role', value as string); // Update the Formik field 'role' with the selected value
+              }}
             />
             <TextInput placeholder="Ime" name="ime" />
             <TextInput placeholder="Prezime" name="prezime" />
@@ -85,7 +91,7 @@ export default observer (function RegisterForm() {
             
             <ErrorMessage
               name="error"
-              render={() => <ValidationError errors={errors.error as unknown as string[]} />}
+              render={() => <ValidationError errors={errors as unknown as string[]} />}
             />
             <Button
               disabled={!isValid || !dirty || isSubmitting}
