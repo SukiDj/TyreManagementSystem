@@ -1,4 +1,4 @@
-import { Grid, Loader, Form, Dropdown, Button } from 'semantic-ui-react';
+import { Grid, Loader, Form, Dropdown, Button, DropdownItemProps } from 'semantic-ui-react';
 import ProductionList from './ProductionRedordList';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../stores/store';
@@ -22,17 +22,20 @@ export default observer(function ProductionDashboard() {
     }
   } = useStore();
 
+  const {tyreStore} = useStore();
  
   useEffect(() => {
     setPagingParams(new PagingParams(0));
     loadProductionRecords(user!.userName); 
-  }, [loadProductionRecords, setPagingParams]);
+    if (tyreStore.tyreRegistry.size === 0) tyreStore.loadTyres();
+  }, [loadProductionRecords, setPagingParams, tyreStore]);
 
   function handleGetNext() {
     setLoadingNext(true);
     setPagingParams(new PagingParams(pagination!.currentPage + 1));
     loadProductionRecords(user!.userName).then(() => setLoadingNext(false));
   }
+
 
   return (
     <Grid style={{ marginTop: '0em' }}>
@@ -45,7 +48,7 @@ export default observer(function ProductionDashboard() {
           </Form.Field>
           <Form.Field>
             <label>Tyre Code</label>
-            <Dropdown placeholder='Select Tyre' fluid selection options={[]} />
+            <Dropdown placeholder='Select Tyre' fluid selection options={tyreStore.tyreOptions} />
           </Form.Field>
           <Form.Field>
             <label>Shift</label>
