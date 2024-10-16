@@ -27,11 +27,13 @@ namespace Application.Productions
                     .Where(p => p.Shift == request.Shift)
                     .Select(p => new ProductionDto
                     {
+                        Id = p.Id,
                         TyreCode = p.Tyre.Code.ToString(),
                         Shift = p.Shift,
                         QuantityProduced = p.QuantityProduced,
                         MachineNumber = p.Machine.Id.ToString(),
-                        ProductionDate = p.ProductionDate
+                        ProductionDate = p.ProductionDate,
+                        OperatorId = p.Operator.Id.ToString()
                     })
                     .ToListAsync(cancellationToken);
 
