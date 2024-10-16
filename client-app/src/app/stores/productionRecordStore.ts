@@ -106,9 +106,7 @@ export default class RecordStore {
         this.recordRegistry.set(record.id,record);
     }
 
-    private getTour = (id:string) =>{
-        return this.recordRegistry.get(id);
-    }
+    
 
     loadProductionRecords = async (userId: string) => {
         this.setLoadingInitial(true);
