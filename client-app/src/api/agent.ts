@@ -3,7 +3,7 @@ import { store } from '../app/stores/store';
 import { PaginatedResult } from "../app/models/Pagination";
 import { router } from '../app/router/Routes';
 import { toast } from 'react-toastify';
-import { User, UserFormValues } from '../app/models/User';
+import { RegisterUserFormValues, User, UserFormValues } from '../app/models/User';
 
 const sleep =(delay: number) =>{
     return new Promise((resolve)=>{
@@ -91,7 +91,8 @@ const requests = {
 
 const Account = {
     login: (user:UserFormValues) => requests.post<User>('/Account/login', user),
-    refreshToken: () => requests.post<User>('/Account/refreshToken/', {})
+    refreshToken: () => requests.post<User>('/Account/refreshToken/', {}),
+    register: (user: RegisterUserFormValues) => requests.post<User>('/Account/register', user)
 }
 
 const agent = {

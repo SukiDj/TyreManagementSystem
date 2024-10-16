@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { User, UserFormValues } from "../models/User";
+import { RegisterUserFormValues, User, UserFormValues } from "../models/User";
 import { store } from "./store";
 import { router } from "../router/Routes";
 import agent from "../../api/agent";
@@ -8,11 +8,14 @@ import agent from "../../api/agent";
 export default class userStore{
     user: User | null = null;
     refreshTokenTimeout?: number;
+    registerNow : boolean = false;
 
 
     constructor(){
         makeAutoObservable(this);
     }
+
+    RegisterNow = () => this.registerNow = true;
 
     get isLoggedIn(){
         return !!this.user;
@@ -65,6 +68,18 @@ export default class userStore{
         this.user = null;
         router.navigate('/');
     }
+
+    register = async (podaci: RegisterUserFormValues) => {
+        try{
+            await agent.Account.register(podaci);
+            router.navigate(`/Account/registerSuccess?email=${podaci.email}`);
+            store.modalStore.closeModal();
+        } catch(error){
+            throw error;
+        }
+        
+    }
+
 
     private startRefreshTokenTimer(user: User){
         const jwToken = JSON.parse(atob(user.token.split('.')[1]));//atob vadi info iz tokena
