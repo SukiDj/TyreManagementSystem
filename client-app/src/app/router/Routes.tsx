@@ -7,6 +7,7 @@ import RequireProductionOperator from "./RequireProductionOperator.tsx";
 import ProductionOperatorPage from "../features/ProductionOperatorPage/ProductionOperatorPage.tsx";
 import RequireBusinessUnitLeader from "./RequireBusinessUnitLeader.tsx";
 import BusinessUnitLeaderPage from "../features/BusinessUnitLeaderPage/BusinessUnitLeaderPage.tsx";
+import RegisterSuccess from "../features/Users/RegisterSuccess.tsx";
 
 export const routes: RouteObject[] = [
     {
@@ -30,7 +31,8 @@ export const routes: RouteObject[] = [
                 ]
             },
 
-            {path:'', element:<HomePage />}
+            {path:'', element:<HomePage />},
+            {path:'/RegisterSuccess', element:<RegisterSuccess />}
         ]
     }
     

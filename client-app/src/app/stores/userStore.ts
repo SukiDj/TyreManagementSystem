@@ -71,9 +71,9 @@ export default class userStore{
 
     register = async (podaci: RegisterUserFormValues) => {
         try{
-            //await agent.Account.register(podaci);
+            await agent.Account.register(podaci);
             console.log(podaci)
-            router.navigate(`/`);
+            router.navigate(`/RegisterSuccess`);
             store.modalStore.closeModal();
         } catch(error){
             throw error;
