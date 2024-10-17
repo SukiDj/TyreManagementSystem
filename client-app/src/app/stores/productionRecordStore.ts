@@ -4,6 +4,7 @@ import agent from "../../api/agent";
 import { format } from "date-fns";
 import { Pagination, PagingParams } from "../models/Pagination";
 import { store } from "./store";
+import { date } from "yup";
 
 export default class RecordStore {
     recordRegistry = new Map<string, ProductionRecord>();
@@ -134,5 +135,78 @@ export default class RecordStore {
             this.setLoadingInitial(false); // Ensure the loading state is reset even if an error occurs
         }
     }
+
+    loadProductionByDay = async (date: Date) => {
+        this.setLoadingInitial(true);
+        try {
+            const result = await agent.BusinessUnit.productionByDay(date);
+            runInAction(() => {
+                this.recordRegistry.clear();
+                result.forEach((record: ProductionRecord) => {
+                    this.setRecord(record);
+                });
+                this.setLoadingInitial(false);
+            });
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
     
+
+    loadProductionByShift = async (shift: number) => {
+        this.setLoadingInitial(true);
+        try {
+            const result = await agent.BusinessUnit.productionByShift(shift);
+            runInAction(() => {
+                this.recordRegistry.clear();
+                result.forEach((record: ProductionRecord) => {
+                    this.setRecord(record);
+                });
+                this.setLoadingInitial(false);
+            });
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
+    
+    
+    loadProductionByMachine = async (machineId: string) => {
+        this.setLoadingInitial(true);
+        try {
+            const result = await agent.BusinessUnit.productionByMachine(machineId);
+            runInAction(() => {
+                this.recordRegistry.clear();
+                result.forEach((record: ProductionRecord) => {
+                    this.setRecord(record);
+                });
+                this.setLoadingInitial(false);
+            });
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
+    
+
+    loadProductionByOperator = async (operatorId: string) => {
+        this.setLoadingInitial(true);
+        try {
+            const result = await agent.BusinessUnit.productionByOperator(operatorId);
+            runInAction(() => {
+                this.recordRegistry.clear();
+                result.forEach((record: ProductionRecord) => {
+                    this.setRecord(record);
+                });
+                this.setLoadingInitial(false);
+            });
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
+    
+    
+
 }

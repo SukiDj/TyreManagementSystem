@@ -12,6 +12,7 @@ import { Tyre } from '../app/models/tyre';
 import { Machine } from '../app/models/Machine';
 import { SaleRecord, SaleRecordFromValues } from '../app/models/SaleRecord';
 import { Client } from '../app/models/Client';
+import { StockRecord } from '../app/models/StockRecord';
 
 const sleep =(delay: number) =>{
     return new Promise((resolve)=>{
@@ -139,11 +140,11 @@ const Account = {
 const BusinessUnit = {
     getProductionData: (): Promise<ProductionData[]> => requests.get(`/businessunit/getProductions`),
     getSalesData: (): Promise<SalesData[]> => requests.get(`/businessunit/getSales`),
-    productionByDay: (date: Date) => requests.get(`/businessunit/productionByDay?date=${date.toISOString()}`),
-    productionByShift: (shift: number) => requests.get(`/businessunit/productionByShift?shift=${shift}`),
-    productionByMachine: (machineId: string) => requests.get(`/businessunit/productionByMachine?machineId=${machineId}`),
-    productionByOperator: (operatorId: string) => requests.get(`/businessunit/productionByOperator?operatorId=${operatorId}`),
-    stockBalance: (date: Date) => requests.get(`/businessunit/stockBalance?date=${date.toISOString()}`)
+    productionByDay: (date: Date) => requests.get<ProductionRecord[]>(`/businessunit/productionByDay?date=${date.toISOString()}`),
+    productionByShift: (shift: number) => requests.get<ProductionRecord[]>(`/businessunit/productionByShift?shift=${shift}`),
+    productionByMachine: (machineId: string) => requests.get<ProductionRecord[]>(`/businessunit/productionByMachine?machineId=${machineId}`),
+    productionByOperator: (operatorId: string) => requests.get<ProductionRecord[]>(`/businessunit/productionByOperator?operatorId=${operatorId}`),
+    stockBalance: (date: Date) => requests.get<StockRecord[]>(`/businessunit/stockBalance?date=${date.toISOString()}`)
 };
 
 const ProductionOperator ={
@@ -166,6 +167,10 @@ const Clients = {
     getClients: () => requests.get<Client[]>('/Client/GetClients')
 }
 
+const StockRecords = {
+    getBalance: (date: Date) => requests.get<StockRecord[]>(`/stockbalance?date=${date.toISOString()}`),
+};
+
 const agent = {
     Account,
     Records,
@@ -173,6 +178,7 @@ const agent = {
     Tyres,
     Machines,
     Clients,
+    StockRecords,
     ProductionOperator,
     QualitySupervisor
 };
