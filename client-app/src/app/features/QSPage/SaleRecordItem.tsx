@@ -11,9 +11,9 @@ interface Props {
 }
 
 export default observer(function SaleRecordItem({ record }: Props) {
-  const { saleRecordStore } = useStore(); // Uzimanje store-a iz MobX-a
-  const [isDeleting, setIsDeleting] = useState(false); // Stanje za loading tokom brisanja
-  const [isEditing, setIsEditing] = useState(false); // Stanje za editovanje
+  const { saleRecordStore } = useStore(); 
+  const [isDeleting, setIsDeleting] = useState(false); 
+  const [isEditing, setIsEditing] = useState(false); 
   const [updatedValues, setUpdatedValues] = useState<SaleRecordFromValues>({
     tyreId: record.tyreCode,
     clientId: record.clientId,
@@ -38,6 +38,7 @@ export default observer(function SaleRecordItem({ record }: Props) {
   // Funkcija za submit izmena
   const handleSubmit = async () => {
     try {
+      console.log(record.id);
       await saleRecordStore.updateRecord(record.id, updatedValues);
       setIsEditing(false); // Zatvara formu nakon uspešne izmene
     } catch (error) {

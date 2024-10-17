@@ -113,16 +113,23 @@ const Records = {
     }) =>
         requests.post<void>('/QualitySupervisor/registerTyreSale', saleData),
         
-        updateProduction: (id: string, productionUpdate: { shift: number, quantityProduced: number}) =>
-            axios.put<void>(`/QualitySupervisor/updateProduction/${id}`, {
+    updateProduction: (id: string, productionUpdate: { shift: number, quantityProduced: number}) =>
+        axios.put<void>(`/QualitySupervisor/updateProduction/${id}`, {
+            params: {
+                shift: productionUpdate.shift,
+                quantityProduced: productionUpdate.quantityProduced
+            }
+        }),
+
+        updateSale: (id: string, saleUpdate: { pricePerUnit: number, clientId: string, quantitySold: number, tyreId: string }) =>
+            axios.put<void>(`/QualitySupervisor/updateSale/${id}`, null, {
                 params: {
-                    shift: productionUpdate.shift,
-                    quantityProduced: productionUpdate.quantityProduced
+                    tyreId: saleUpdate.tyreId,
+                    clientId: saleUpdate.clientId,
+                    quantitySold: saleUpdate.quantitySold,
+                    pricePerUnit: saleUpdate.pricePerUnit
                 }
             }),
-
-    updateSale: (id: string, saleUpdate: { pricePerUnit: number, clientId: string, quantitySold: number, tyreId: string }) =>
-        requests.put<void>(`/QualitySupervisor/updateSale/${id}`, saleUpdate),
 
     deleteSaleRecord: (id: string) => requests.del(`/QualitySupervisor/deleteSale/${id}`),
         

@@ -60,6 +60,7 @@ export default class RecordStore {
     updateRecord = async (id: string | undefined, record: SaleRecordFromValues) => {
         try {
             const saleUpdate = {
+                id: id,
                 pricePerUnit: record.pricePerUnit,
                 quantitySold: record.quantitySold,
                 unitOfMeasure: record.unitOfMeasure,
@@ -68,13 +69,13 @@ export default class RecordStore {
                 productionOrderId: record.productionOrderId,
                 targetMarket: record.targetMarket
             };
-
-            await agent.Records.updateSale(record.id!, saleUpdate);
+            console.log(id, "aj sad")
+            await agent.Records.updateSale(id!, saleUpdate);
 
             runInAction(() => {
-                if (record.id) {
-                    const updatedRecord = { ...this.getRecord(record.id), ...record };
-                    this.recordRegistry.set(record.id, updatedRecord as SaleRecord);
+                if (id!) {
+                    const updatedRecord = { ...this.getRecord(id!), ...record };
+                    this.recordRegistry.set(id!, updatedRecord as SaleRecord);
                     this.selectedRecord = updatedRecord as SaleRecord;
                 }
             });
