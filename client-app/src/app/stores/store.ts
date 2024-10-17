@@ -9,6 +9,7 @@ import machineStore from "./machineStore";
 import productionRecordStore from "./productionRecordStore";
 import saleRecordStore from "./saleRecordStore";
 import clientStore from "./clientStore";
+import stockRecordStore from "./stockRecordStore";
 
 interface Store{
     commonStore : CommonStore;
@@ -21,6 +22,7 @@ interface Store{
     clientStore: clientStore;
     productionRecordStore: productionRecordStore;
     saleRecordStore: saleRecordStore;
+    stockRecordStore: stockRecordStore;
 }
 
 export const store: Store = {
@@ -33,7 +35,8 @@ export const store: Store = {
     machineStore: new machineStore(),
     clientStore: new clientStore(),
     productionRecordStore: new productionRecordStore(),
-    saleRecordStore: new saleRecordStore()
+    saleRecordStore: new saleRecordStore(),
+    stockRecordStore: new stockRecordStore()
 }
 
 export const StoreContext = createContext(store);
