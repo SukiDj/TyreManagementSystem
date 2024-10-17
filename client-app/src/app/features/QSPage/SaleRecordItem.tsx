@@ -1,10 +1,10 @@
 import { Button, Icon, Item, Segment } from "semantic-ui-react";
-import { SaleRecord } from "../../models/SaleRecord"; // Uveri se da putanja odgovara tvojoj strukturi
-import { Link } from "react-router-dom"; // Ako želiš da dodaš navigaciju
+import { SaleRecord } from "../../models/SaleRecord"; 
+import { Link } from "react-router-dom"; 
 import { observer } from "mobx-react-lite";
 
 interface Props {
-  record: SaleRecord; // Očekujemo SaleRecord kao prop
+  record: SaleRecord;
 }
 
 export default observer(function SaleRecordItem({ record }: Props) {
@@ -49,7 +49,7 @@ export default observer(function SaleRecordItem({ record }: Props) {
         </span>
       </Segment>
 
-      {/* Možeš dodati dugme za više informacija ili uređivanje */}
+      {}
       <Segment>
         <Button as={Link} to={`/sales/${record.id}`} color="blue">
           View Details

@@ -1,13 +1,13 @@
 import { Grid, Loader, Form, Dropdown, Button } from 'semantic-ui-react';
 import SaleList from './SaleRecordList';
-import ProductionList from '../ProductionOperatorPage/ProductionRedordList';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../stores/store';
 import { PagingParams } from '../../models/Pagination';
 import InfiniteScroll from 'react-infinite-scroller';
 import SaleListItemPlaceholder from './SaleRecordItemPlaceholder';
-import ProductionListItemPlaceholder from '../ProductionOperatorPage/ProductionRecordItemPlaceholder';
 import { useEffect, useState } from 'react';
+import SaleRecordItemPlaceholder from './SaleRecordItemPlaceholder';
+import SaleRecordList from './SaleRecordList';
 
 export default observer(function SaleDashboard() {
   const {
@@ -30,7 +30,7 @@ export default observer(function SaleDashboard() {
 
   useEffect(() => {
     setPagingParams(new PagingParams(0)); 
-    loadSaleRecords(); // Učitavanje prodajnih zapisa umesto proizvodnih
+    loadSaleRecords(); 
     if (tyreStore.tyreRegistry.size === 0) tyreStore.loadTyres();
     if (clientStore.clientRegistry.size === 0) clientStore.loadClients(); // Učitavanje klijenata
   }, [loadSaleRecords, setPagingParams, tyreStore, clientStore]);
@@ -193,15 +193,15 @@ export default observer(function SaleDashboard() {
               >
                 <br />
                 <br />
-                <SaleList />
+                <SaleRecordList />
               </InfiniteScroll>
             )}
           </>
         ) : (
           (loadingInitial && !loadingNext) || isSubmitting ? (
             <>
-              <ProductionListItemPlaceholder />
-              <ProductionListItemPlaceholder />
+              <SaleRecordItemPlaceholder />
+              <SaleRecordItemPlaceholder />
             </>
           ) : (
             <InfiniteScroll
@@ -213,13 +213,13 @@ export default observer(function SaleDashboard() {
               <br/>
               <br/>
   
-              <ProductionList />
+              <SaleRecordList />
             </InfiniteScroll>
           )
         )}
       </Grid.Column>
       <Grid.Column width='6'>
-        {/* Ovde možeš dodati dodatne filtere ili informacije */}
+        {}
       </Grid.Column>
       <Grid.Column width={10}>
         <Loader active={loadingNext} />
