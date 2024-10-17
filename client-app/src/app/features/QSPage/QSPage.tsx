@@ -8,6 +8,8 @@ import SaleListItemPlaceholder from './SaleRecordItemPlaceholder';
 import { useEffect, useState } from 'react';
 import SaleRecordItemPlaceholder from './SaleRecordItemPlaceholder';
 import SaleRecordList from './SaleRecordList';
+import ProductionRecordItemPlaceholder from '../ProductionOperatorPage/ProductionRecordItemPlaceholder';
+import ProductionRedordList from '../ProductionOperatorPage/ProductionRedordList';
 
 export default observer(function SaleDashboard() {
   const {
@@ -19,10 +21,14 @@ export default observer(function SaleDashboard() {
       setLoadingNext,
       loadingInitial,
       isSubmitting,
-      createRecord
+      createRecord,
     },
     tyreStore,
-    clientStore
+    clientStore,
+    userStore: {user},
+    recordStore: {
+      loadAllProductionRecords,
+    }
   } = useStore();
 
   //DODATO
@@ -30,16 +36,24 @@ export default observer(function SaleDashboard() {
 
   useEffect(() => {
     setPagingParams(new PagingParams(0)); 
+    loadAllProductionRecords(); 
     loadSaleRecords(); 
     if (tyreStore.tyreRegistry.size === 0) tyreStore.loadTyres();
     if (clientStore.clientRegistry.size === 0) clientStore.loadClients(); // Učitavanje klijenata
-  }, [loadSaleRecords, setPagingParams, tyreStore, clientStore]);
+  }, [loadSaleRecords, setPagingParams, tyreStore, clientStore, loadAllProductionRecords]);
 
   function handleGetNext() {
     setLoadingNext(true);
     setPagingParams(new PagingParams(pagination!.currentPage + 1));
     loadSaleRecords().then(() => setLoadingNext(false)); // Prodajni zapisi
   }
+
+  function handleGetNextProd() {
+    setLoadingNext(true);
+    setPagingParams(new PagingParams(pagination!.currentPage + 1));
+    loadAllProductionRecords().then(() => setLoadingNext(false));
+  }
+
 
   const unitOptions = [
     { key: 'pcs', text: 'Pieces', value: 'pcs' },
@@ -92,7 +106,7 @@ export default observer(function SaleDashboard() {
           Show Production Records
         </Button>
 
-        {showSales ? (
+       {showSales ? (
           <>
             <Form onSubmit={handleSubmit}>
               <Form.Field>
@@ -196,27 +210,29 @@ export default observer(function SaleDashboard() {
                 <SaleRecordList />
               </InfiniteScroll>
             )}
+            
           </>
         ) : (
           (loadingInitial && !loadingNext) || isSubmitting ? (
             <>
-              <SaleRecordItemPlaceholder />
-              <SaleRecordItemPlaceholder />
+              <ProductionRecordItemPlaceholder />
+              <ProductionRecordItemPlaceholder />
             </>
           ) : (
             <InfiniteScroll
               pageStart={0}
-              loadMore={handleGetNext}
+              loadMore={handleGetNextProd}
               hasMore={!loadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
               initialLoad={false}
             >
               <br/>
-              <br/>
+              
   
-              <SaleRecordList />
+              <ProductionRedordList />
             </InfiniteScroll>
           )
-        )}
+        )
+      }
       </Grid.Column>
       <Grid.Column width='6'>
         {}
