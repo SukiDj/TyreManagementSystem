@@ -14,7 +14,7 @@ export default observer(function SaleRecordList() {
         groupedRecords.map(([group, records]) => (  // Mapa kroz grupisane zapise
           <Fragment key={group}>
             <Header sub color='teal'>
-              {group}  {/* Prikazujemo naziv grupe (npr. ciljano tržište) */}
+              {group}  {}
             </Header>
             {
               records.map(record => (

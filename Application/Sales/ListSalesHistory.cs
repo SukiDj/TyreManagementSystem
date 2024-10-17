@@ -28,10 +28,13 @@ namespace Application.Sales
                     .Select(s => new SaleDto
                     {
                         Id = s.Id,
-                        TyreName = s.Tyre.Name,
+                        TyreCode = s.Tyre.Code,
                         QuantitySold = s.QuantitySold,
                         SaleDate = s.SaleDate,
-                        ClientName = s.Client.Name
+                        ClientId = s.Client.Id,
+                        TargetMarket = s.TargetMarket,
+                        PricePerUnit = s.PricePerUnit,
+                        ProductionOrderId = s.Production.Id
                     })
                     .ToListAsync();
 
