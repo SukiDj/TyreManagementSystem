@@ -1,4 +1,4 @@
-import { Grid, Loader, Form, Dropdown, Button } from 'semantic-ui-react';
+import { Grid, Loader, Form, Dropdown, Button, Segment } from 'semantic-ui-react';
 import SaleList from './SaleRecordList';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../stores/store';
@@ -25,27 +25,29 @@ export default observer(function SaleDashboard() {
     },
     tyreStore,
     clientStore,
-    userStore: {user},
+    userStore: { user }, // Uvoz funkcije za logove
+    logStore: { loadLogs },
     recordStore: {
       loadAllProductionRecords,
-    }
+    },
   } = useStore();
 
-  //DODATO
-  const [showSales, setShowSales] = useState(true);
+  const [showSales, setShowSales] = useState(true); // Prikaz prodajnih zapisa ili proizvodnih
+  const [logs, setLogs] = useState<string[]>([]); // Stanje za logove akcija
 
+  // Učitavanje osnovnih podataka prilikom mount-a komponente
   useEffect(() => {
     setPagingParams(new PagingParams(0)); 
     loadAllProductionRecords(); 
     loadSaleRecords(); 
     if (tyreStore.tyreRegistry.size === 0) tyreStore.loadTyres();
-    if (clientStore.clientRegistry.size === 0) clientStore.loadClients(); // Učitavanje klijenata
+    if (clientStore.clientRegistry.size === 0) clientStore.loadClients();
   }, [loadSaleRecords, setPagingParams, tyreStore, clientStore, loadAllProductionRecords]);
 
   function handleGetNext() {
     setLoadingNext(true);
     setPagingParams(new PagingParams(pagination!.currentPage + 1));
-    loadSaleRecords().then(() => setLoadingNext(false)); // Prodajni zapisi
+    loadSaleRecords().then(() => setLoadingNext(false));
   }
 
   function handleGetNextProd() {
@@ -54,6 +56,15 @@ export default observer(function SaleDashboard() {
     loadAllProductionRecords().then(() => setLoadingNext(false));
   }
 
+  // Funkcija za učitavanje logova akcija
+  const handleShowLogs = async () => {
+    try {
+      const fetchedLogs = await loadLogs(); // Funkcija koja vraća logove
+      setLogs(fetchedLogs);
+    } catch (error) {
+      console.error("Error loading logs:", error);
+    }
+  };
 
   const unitOptions = [
     { key: 'pcs', text: 'Pieces', value: 'pcs' },
@@ -94,19 +105,39 @@ export default observer(function SaleDashboard() {
     <Grid style={{ marginTop: '0em' }}>
       <Grid.Column width='10'>
         <Button
-          onClick={() => setShowSales(true)} // Dugme za prikaz prodajnih zapisa
+          onClick={() => setShowSales(true)}
           color={showSales ? 'teal' : 'grey'}
         >
           Show Sale Records
         </Button>
         <Button
-          onClick={() => setShowSales(false)} // Dugme za prikaz proizvodnih zapisa
+          onClick={() => setShowSales(false)}
           color={!showSales ? 'teal' : 'grey'}
         >
           Show Production Records
         </Button>
 
-       {showSales ? (
+        {/* Dugme za prikaz logova */}
+        <Button 
+          onClick={handleShowLogs}
+          color='blue'
+        >
+          Show Action Logs
+        </Button>
+
+        {/* Prikaz logova u slučaju da su učitani */}
+        {logs.length > 0 && (
+          <Segment>
+            <h3>Action Logs:</h3>
+            <ul>
+              {logs.map((log, index) => (
+                <li key={index}>{log}</li>
+              ))}
+            </ul>
+          </Segment>
+        )}
+
+        {showSales ? (
           <>
             <Form onSubmit={handleSubmit}>
               <Form.Field>
@@ -126,7 +157,7 @@ export default observer(function SaleDashboard() {
                   placeholder='Select Client'
                   fluid
                   selection
-                  options={clientStore.clientOptions} // Opcije za klijente
+                  options={clientStore.clientOptions}
                   value={clientId}
                   onChange={(_e, { value }) => setClientId(value as string)}
                 />
@@ -195,8 +226,8 @@ export default observer(function SaleDashboard() {
 
             {(loadingInitial && !loadingNext) || isSubmitting ? (
               <>
-                <SaleListItemPlaceholder />
-                <SaleListItemPlaceholder />
+                <SaleRecordItemPlaceholder />
+                <SaleRecordItemPlaceholder />
               </>
             ) : (
               <InfiniteScroll
@@ -210,7 +241,6 @@ export default observer(function SaleDashboard() {
                 <SaleRecordList />
               </InfiniteScroll>
             )}
-            
           </>
         ) : (
           (loadingInitial && !loadingNext) || isSubmitting ? (
@@ -226,16 +256,13 @@ export default observer(function SaleDashboard() {
               initialLoad={false}
             >
               <br/>
-              
-  
               <ProductionRedordList />
             </InfiniteScroll>
           )
-        )
-      }
+        )}
       </Grid.Column>
       <Grid.Column width='6'>
-        {}
+        {/* Prazan Grid za potencijalnu upotrebu */}
       </Grid.Column>
       <Grid.Column width={10}>
         <Loader active={loadingNext} />

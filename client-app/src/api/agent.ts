@@ -173,6 +173,10 @@ const StockRecords = {
     getBalance: (date: Date) => requests.get<StockRecord[]>(`/stockbalance?date=${date.toISOString()}`),
 };
 
+const Logs = {
+    list: () => requests.get<string[]>('/ActionLog/GetActions'), // Poziv GET /api/log za povlačenje logova
+};
+
 const agent = {
     Account,
     Records,
@@ -181,6 +185,7 @@ const agent = {
     Machines,
     Clients,
     StockRecords,
+    Logs,
     ProductionOperator,
     QualitySupervisor
 };
