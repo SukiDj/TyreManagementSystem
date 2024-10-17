@@ -110,7 +110,7 @@ const Records = {
         unitOfMeasure: string; 
         targetMarket: string; 
     }) =>
-        requests.post<void>('/QualitySupervisor/registerTyreSale', saleData),    
+        requests.post<void>('/QualitySupervisor/registerTyreSale', saleData),
         
     updateProduction: (id: string, productionUpdate: { shift: number, quantityProduced: number, tyreId: string }) =>
         requests.put<void>(`/QualitySupervisor/updateProduction/${id}`, productionUpdate),
