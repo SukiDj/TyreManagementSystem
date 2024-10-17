@@ -41,14 +41,14 @@ namespace API.Controllers
         }
 
         [HttpPut("updateProduction/{id}")]
-        public async Task<IActionResult> UpdateProduction(Guid id, int shift, int quantityProduced, Guid tyreId)
+        public async Task<IActionResult> UpdateProduction(Guid id, int shift, int quantityProduced, DateTime date)
         {
             var command = new UpdateProduction.Command
             {
                 Id = id,
                 Shift = shift,
                 QuantityProduced = quantityProduced,
-                TyreId = tyreId
+                Date = date
             };
             return HandleResult(await Mediator.Send(command));
         }

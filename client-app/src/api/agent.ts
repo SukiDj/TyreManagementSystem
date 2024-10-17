@@ -112,8 +112,13 @@ const Records = {
     }) =>
         requests.post<void>('/QualitySupervisor/registerTyreSale', saleData),
         
-    updateProduction: (id: string, productionUpdate: { shift: number, quantityProduced: number, tyreId: string }) =>
-        requests.put<void>(`/QualitySupervisor/updateProduction/${id}`, productionUpdate),
+        updateProduction: (id: string, productionUpdate: { shift: number, quantityProduced: number}) =>
+            axios.put<void>(`/QualitySupervisor/updateProduction/${id}`, {
+                params: {
+                    shift: productionUpdate.shift,
+                    quantityProduced: productionUpdate.quantityProduced
+                }
+            }),
 
     updateSale: (id: string, saleUpdate: { pricePerUnit: number, clientId: string, quantitySold: number, tyreId: string }) =>
         requests.put<void>(`/QualitySupervisor/updateSale/${id}`, saleUpdate),

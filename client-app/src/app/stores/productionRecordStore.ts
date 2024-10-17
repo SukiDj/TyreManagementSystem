@@ -61,8 +61,7 @@ export default class RecordStore {
         try {
             const productionUpdate = {
                 shift: record.shift,
-                quantityProduced: record.quantityProduced,
-                tyreId: record.tyreId
+                quantityProduced: record.quantityProduced
             };
 
             await agent.Records.updateProduction(record.id!, productionUpdate);
