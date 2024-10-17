@@ -57,7 +57,7 @@ export default class RecordStore {
         }
     };
 
-    updateRecord = async (record: SaleRecordFromValues) => {
+    updateRecord = async (id: string | undefined, record: SaleRecordFromValues) => {
         try {
             const saleUpdate = {
                 pricePerUnit: record.pricePerUnit,
@@ -124,5 +124,14 @@ export default class RecordStore {
         }
     }
     
-    
+    deleteSaleRecord = async (id: string) => {
+        try {
+          await agent.Records.deleteSaleRecord(id); // API poziv za brisanje
+          runInAction(() => {
+            this.recordRegistry.delete(id);
+          });
+        } catch (error) {
+          console.log(error);
+        }
+    };
 }

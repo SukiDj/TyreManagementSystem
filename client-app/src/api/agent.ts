@@ -118,6 +118,8 @@ const Records = {
 
     updateSale: (id: string, saleUpdate: { pricePerUnit: number, clientId: string, quantitySold: number, tyreId: string }) =>
         requests.put<void>(`/QualitySupervisor/updateSale/${id}`, saleUpdate),
+
+    deleteSaleRecord: (id: string) => requests.del(`/QualitySupervisor/deleteSale/${id}`),
         
     getProductionHistory: (operatorId: string) => axios.get<ProductionRecord[]>(`/ProductionOperator/history`),
 
