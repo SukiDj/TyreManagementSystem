@@ -12,7 +12,7 @@ namespace Application.Productions
             public Guid Id { get; set; }
             public int Shift { get; set; }
             public int QuantityProduced { get; set; }
-            public Guid TyreId { get; set; }
+            public DateTime Date { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -34,14 +34,13 @@ namespace Application.Productions
 
                 production.Shift = request.Shift;
                 production.QuantityProduced = request.QuantityProduced;
-                //production.ProdOrderID = request.ProdOrderID;
-                production.Tyre = await _context.Tyres.FindAsync(request.TyreId);
+                production.ProductionDate = request.Date;
 
                 var result = await _context.SaveChangesAsync() > 0;
 
                 if (!result) return Result<Unit>.Failure("Failed to update production");
 
-                await _actionLogger.LogActionAsync("UpdateProduction", $"Production updated for TyreId: {request.TyreId}, ProductionId: {production.Id}");
+                await _actionLogger.LogActionAsync("UpdateProduction", $"Production updated for ProductionId: {production.Id}");
 
                 return Result<Unit>.Success(Unit.Value);
             }
